@@ -1,3 +1,4 @@
+## Topics
 * std::allocators
 * algorithms
 * containers
@@ -5,3 +6,4 @@
 * variadic templates
 * template as a template parameter
 * C++11, C++14 and C++17
+* Free-store vs heap
