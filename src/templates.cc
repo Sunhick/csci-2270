@@ -33,17 +33,24 @@ struct Bar {
 //    T<X> tx;
 //};
 
-template<typename T>
+template<typename T, typename U>
 class List  {
+public:
+    T *t;
+    string name = "Welcome";
+};
+
+template<typename T>
+class List2  {
 public:
     T *t;
 };
 
-// template as template parameter
-template<typename T, template<typename>class U>
+template<typename T, template<typename, typename>class U>
 class Stack {
 public:
-    U<T> u;
+    typedef U<T,T> Type;
+    U<T, T> u;
 };
 
 int main(int argc, char* argv[]) {
@@ -54,6 +61,8 @@ int main(int argc, char* argv[]) {
     Bar<Foo<Person>> bar;
     
     Stack<int, List> st;
+    
+    Stack<int, List>::Type t;
     
     cout << "hello \n";
     
