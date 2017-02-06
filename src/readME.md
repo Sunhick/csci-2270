@@ -9,3 +9,5 @@
 * Free-store vs heap
 * Reflection in C++11 (later)
 * typename vs class in templates
+* policy based design in C++11
+* Type traits
