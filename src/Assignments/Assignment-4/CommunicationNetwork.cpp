@@ -6,6 +6,9 @@
 //  Copyright © 2017 Sunil. All rights reserved.
 //
 
+#include <fstream>
+#include <algorithm>
+
 #include "CommunicationNetwork.h"
 
 using namespace std;
@@ -33,7 +36,7 @@ CommunicationNetwork::~CommunicationNetwork() {
     this->tail = nullptr;
 }
 
-void CommunicationNetwork::addCity(std::string newCityName, std::string followingCityName) {
+void CommunicationNetwork::addCity(std::string newCityName, std::string previousCityName) {
     if(!this->head) {
         // no network. Create a network with first city
         this->head = new City(newCityName, nullptr, "");
@@ -41,7 +44,7 @@ void CommunicationNetwork::addCity(std::string newCityName, std::string followin
         return;
     }
     
-    if(followingCityName.empty()) {
+    if(previousCityName.empty()) {
         // if no following city is mentioned, then add to the tail
         this->tail->next = new City(newCityName, nullptr, "");
         this->tail = this->tail->next;
@@ -49,7 +52,7 @@ void CommunicationNetwork::addCity(std::string newCityName, std::string followin
     }
     
     City* ptr = this->head;
-    while(ptr->cityName != followingCityName) {
+    while(ptr->cityName != previousCityName) {
         ptr = ptr->next;
     }
     
@@ -67,17 +70,34 @@ void CommunicationNetwork::buildNetwork() {
     }
 }
 
-void CommunicationNetwork::transmitMsg(char * msg) { //this is like a string
-    City* city = this->head;
-    if(!city) {
-        // no network
+void CommunicationNetwork::transmitMsg(char * filename) { //this is like a string
+    ifstream file(filename);
+    
+    // non-existant or corrupted file
+    if(file.fail()) {
         return;
     }
     
-    while(city) {
-        city->message = msg;
-        cout << city->cityName << " received " << city->message << endl;
-        city = city->next;
+    // no network
+    if(!this->head) {
+        cout << "Empty list" << endl;
+        return;
+    }
+    
+    std::string word;
+    while(std::getline(file, word, ' ')) {
+        // remove the newline from the word if it has.
+        word.erase(std::remove(word.begin(), word.end(), '\n'), word.end());
+        City* receiver = this->head;
+        while(receiver) {
+            // set the message
+            receiver->message = word;
+            cout << receiver->cityName << " received " << receiver->message << endl;
+            
+            // delete the message
+            receiver->message = "";
+            receiver = receiver->next;
+        }
     }
 }
 

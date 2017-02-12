@@ -5,12 +5,9 @@
 //  Created by Sunil on 2/11/17.
 //  Copyright © 2017 Sunil. All rights reserved.
 //
-
-#ifndef CommunicationNetwork_h
-#define CommunicationNetwork_h
-
+#ifndef COMMUNICATIONNETWORK_H
+#define COMMUNICATIONNETWORK_H
 #include <iostream>
-
 struct City{
     std::string cityName;
     std::string message;
@@ -24,6 +21,7 @@ struct City{
         next = initNext;
         message = initMessage;
     }
+    
 };
 
 class CommunicationNetwork
@@ -41,5 +39,4 @@ private:
     City *tail;
 };
 
-
-#endif /* CommunicationNetwork_h */
+#endif // COMMUNICATIONNETWORK_H
