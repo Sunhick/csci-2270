@@ -72,7 +72,6 @@ int main(int argc, const char * argv[]) {
             case 5:
             {
                 exit = true;
-                cout << "Goodbye!" << endl;
                 break;
             }
         }
@@ -84,5 +83,7 @@ int main(int argc, const char * argv[]) {
         
         cout << dmenu;
     }
+    
+    cout << "Goodbye!" << endl;
     return 0;
 }
