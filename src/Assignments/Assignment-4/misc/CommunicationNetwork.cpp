@@ -35,7 +35,7 @@ CommunicationNetwork::~CommunicationNetwork() {
     this->tail = nullptr;
 }
 
-void CommunicationNetwork::addCity(std::string newCityName, std::string followingCityName) {
+void CommunicationNetwork::addCity(T newCityName, T followingCityName) {
     if(!this->head) {
         // no network. Create a network with first city
         this->head = new City<typename CommunicationNetwork::value_type>(newCityName, nullptr, "");

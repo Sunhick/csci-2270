@@ -17,25 +17,27 @@
 
 //class NetworkIterator;
 
-class CommunicationNetwork : public NetworkTypeTraits<std::string> {
+using T = std::string;
+
+class CommunicationNetwork : public NetworkTypeTraits<T> {
 public:
     CommunicationNetwork();
     ~CommunicationNetwork();
-    void addCity(std::string, std::string);
+    void addCity(T, T);
     void buildNetwork();
     void transmitMsg(char *); //this is like a string
     void printNetwork();
-    NetworkIterator<std::string> begin() {
-        return NetworkIterator<std::string>(this->head);
-    }
-    NetworkIterator<std::string> end() {
-        return NetworkIterator<std::string>();
+    NetworkIterator<T> begin() {
+        return NetworkIterator<T>(this->head);
     }
     
+    NetworkIterator<std::string> end() {
+        return NetworkIterator<T>();
+    }
     
 private:
-    City<std::string> *head;
-    City<std::string> *tail;
+    typename NetworkTypeTraits<T>::ptr_type head;
+    typename NetworkTypeTraits<T>::ptr_type tail;
 };
 
 
