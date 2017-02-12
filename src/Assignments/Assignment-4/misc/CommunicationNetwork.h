@@ -15,10 +15,9 @@
 #include "NetworkTypeTraits.h"
 #include "NetworkIterator.h"
 
-//class NetworkIterator;
+//using T = std::string;
 
-using T = std::string;
-
+template<class T = std::string>
 class CommunicationNetwork : public NetworkTypeTraits<T> {
 public:
     CommunicationNetwork();
@@ -40,5 +39,7 @@ private:
     typename NetworkTypeTraits<T>::ptr_type tail;
 };
 
+
+#include "CommunicationNetwork.cpp"
 
 #endif /* CommunicationNetwork_h */

@@ -26,7 +26,7 @@ int main(int argc, const char * argv[]) {
     
     cout << dmenu;
     
-    CommunicationNetwork comNet;
+    CommunicationNetwork<std::string> comNet;
     int option;
     bool exit = false;
     

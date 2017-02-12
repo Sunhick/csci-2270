@@ -19,44 +19,17 @@ private:
     typename NetworkTypeTraits<T>::ptr_type head;
     
 public:
-    NetworkIterator(typename NetworkTypeTraits<T>::ptr_type start) {
-        this->head = start;
-    }
-    
-    NetworkIterator() {
-        this->head = nullptr;
-    }
-    
-    ~NetworkIterator() {
-        this->head = nullptr;
-    }
-    
-    bool operator!=(const NetworkIterator& end) const {
-        return this->head != end.head;
-    }
-    
-    bool operator==(const NetworkIterator& end) const {
-        return this->head == end.head;
-    }
-    
-    typename NetworkTypeTraits<T>::value_type operator*() const {
-        return this->head->cityName;
-    }
-    
-    typename NetworkTypeTraits<T>::ptr_type operator->() const {
-        return this->head;
-    }
-    
-    NetworkIterator& operator++() {
-        this->head = this->head->next;
-        return *this;
-    }
-    
-    NetworkIterator operator++(int) {
-        NetworkIterator temp(*this);
-        this->head = this->head->next;
-        return temp;
-    }
+    NetworkIterator(typename NetworkTypeTraits<T>::ptr_type start);
+    NetworkIterator();
+    ~NetworkIterator();
+    bool operator!=(const NetworkIterator<T>& end) const;
+    bool operator==(const NetworkIterator<T>& end) const;
+    typename NetworkTypeTraits<T>::value_type operator*() const;
+    typename NetworkTypeTraits<T>::ptr_type operator->() const;
+    NetworkIterator<T>& operator++();
+    NetworkIterator<T> operator++(int);
 };
+
+#include "NetworkIterator.cpp"
 
 #endif /* NetworkIterator_h */

@@ -8,22 +8,27 @@
 #include <fstream>
 #include <algorithm>
 
+#ifndef CommunicationNetwork_cpp
+#define CommunicationNetwork_cpp
+
 #include "CommunicationNetwork.h"
 
 using namespace std;
 
-CommunicationNetwork::CommunicationNetwork() {
+template<class T>
+CommunicationNetwork<T>::CommunicationNetwork() {
     this->head = nullptr;
     this->tail = nullptr;
 }
 
-CommunicationNetwork::~CommunicationNetwork() {
+template<class T>
+CommunicationNetwork<T>::~CommunicationNetwork() {
     if(!this->head) {
         // nothing to delete
         return;
     }
     
-    CommunicationNetwork::ptr_type prevCity = this->head;
+    typename CommunicationNetwork<T>::ptr_type prevCity = this->head;
     
     while(prevCity) {
         this->head = this->head->next;
@@ -35,7 +40,8 @@ CommunicationNetwork::~CommunicationNetwork() {
     this->tail = nullptr;
 }
 
-void CommunicationNetwork::addCity(T newCityName, T followingCityName) {
+template<class T>
+void CommunicationNetwork<T>::addCity(T newCityName, T followingCityName) {
     if(!this->head) {
         // no network. Create a network with first city
         this->head = new City<typename CommunicationNetwork::value_type>(newCityName, nullptr, "");
@@ -50,16 +56,17 @@ void CommunicationNetwork::addCity(T newCityName, T followingCityName) {
         return;
     }
     
-    CommunicationNetwork::ptr_type ptr = this->head;
+    typename CommunicationNetwork<T>::ptr_type ptr = this->head;
     while(ptr->cityName != followingCityName) {
         ptr = ptr->next;
     }
     
-    CommunicationNetwork::ptr_type newCity = new City<typename CommunicationNetwork::value_type>(newCityName, ptr->next, "");
+    typename CommunicationNetwork<T>::ptr_type newCity = new City<typename CommunicationNetwork::value_type>(newCityName, ptr->next, "");
     ptr->next = newCity;
 }
 
-void CommunicationNetwork::buildNetwork() {
+template<class T>
+void CommunicationNetwork<T>::buildNetwork() {
     string cities[] = {"Los Angeles", "Phoenix", "Denver", "Dallas", "St. Louis", "Chicago", \
         "Atlanta", "Washington, D.C.", "New York", "Boston"};
     
@@ -69,7 +76,8 @@ void CommunicationNetwork::buildNetwork() {
     }
 }
 
-void CommunicationNetwork::transmitMsg(char *filename) { //this is like a string
+template<class T>
+void CommunicationNetwork<T>::transmitMsg(char *filename) { //this is like a string
     ifstream file(filename);
     
     // non-existant or corrupted file
@@ -87,7 +95,7 @@ void CommunicationNetwork::transmitMsg(char *filename) { //this is like a string
     while(std::getline(file, word, ' ')) {
         // remove the newline from the word if it has.
         word.erase(std::remove(word.begin(), word.end(), '\n'), word.end());
-        CommunicationNetwork::ptr_type receiver = this->head;
+        typename CommunicationNetwork<T>::ptr_type receiver = this->head;
         while(receiver) {
             // set the message
             receiver->message = word;
@@ -100,7 +108,8 @@ void CommunicationNetwork::transmitMsg(char *filename) { //this is like a string
     }
 }
 
-void CommunicationNetwork::printNetwork() {
+template<class T>
+void CommunicationNetwork<T>::printNetwork() {
     cout << "===CURRENT PATH===" << endl;
     
     std::for_each(this->begin(), this->end(), [](string city){
@@ -110,3 +119,5 @@ void CommunicationNetwork::printNetwork() {
     cout << "NULL"<< endl;
     cout << "==================" << endl;
 }
+
+#endif /* CommunicationNetwork_cpp */
