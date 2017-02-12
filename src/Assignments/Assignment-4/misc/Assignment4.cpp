@@ -14,8 +14,26 @@
 
 using namespace std;
 
+template<>
+std::string DefaultValues<std::string>::values[10] = {"Los Angeles", "Phoenix", "Denver", \
+    "Dallas", "St. Louis", "Chicago", "Atlanta", "Washington, D.C.", "New York", "Boston"};
+
+template<>
+std::string DefaultValues<std::string>::dval = "";
+
+template<>
+int DefaultValues<int>::values[10] = {10,9,8,7,6,5,4,3,2,1};
+
+template<>
+int DefaultValues<int>::dval = -1;
+
+template<>
+double DefaultValues<double>::values[10] = {10.9,9.9,8.9,7.9,6.9,5.9,4.9,3.9,2.9,1.9};
+
+template<>
+double DefaultValues<double>::dval = -1.0;
+
 int main(int argc, const char * argv[]) {
-    
     // Automatic string concat
     std::string dmenu = "======Main Menu======\n"
                         "1. Build Network\n"
@@ -23,6 +41,14 @@ int main(int argc, const char * argv[]) {
                         "3. Transmit Message Coast-To-Coast\n"
                         "4. Add City\n"
                         "5. Quit\n";
+    
+    CommunicationNetwork<int> intNets;
+    intNets.buildNetwork();
+    intNets.printNetwork();
+    
+    CommunicationNetwork<double> dNets;
+    dNets.buildNetwork();
+    dNets.printNetwork();
     
     cout << dmenu;
     

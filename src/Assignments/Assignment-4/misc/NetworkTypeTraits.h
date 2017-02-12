@@ -14,14 +14,14 @@
 template<typename T>
 struct City {
     T cityName;
-    T message;
+    std::string message;
     City *next;
     
     using v_type = T;
     
     City(){ }; // default constructor
     
-    City(T initName, City *initNext, T initMessage)
+    City(T initName, City *initNext, std::string initMessage)
     {
         cityName = initName;
         next = initNext;
