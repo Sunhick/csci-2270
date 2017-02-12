@@ -11,3 +11,5 @@
 * typename vs class in templates
 * policy based design in C++11
 * Type traits
+* Template polymorphism
+* Variadic Template polymorphism
