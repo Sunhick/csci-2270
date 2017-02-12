@@ -56,12 +56,12 @@ void CommunicationNetwork<T>::addCity(T newCityName, T followingCityName) {
         return;
     }
     
-//    if(followingCityName.empty()) {
-//        // if no following city is mentioned, then add to the tail
-//        this->tail->next = new City<typename CommunicationNetwork::value_type>(newCityName, nullptr, "");
-//        this->tail = this->tail->next;
-//        return;
-//    }
+    if(followingCityName == DefaultValues<T>::dval) {
+        // if no following city is mentioned, then add to the tail
+        this->tail->next = new City<typename CommunicationNetwork::value_type>(newCityName, nullptr, "");
+        this->tail = this->tail->next;
+        return;
+    }
     
     typename CommunicationNetwork<T>::ptr_type ptr = this->head;
     while(ptr->cityName != followingCityName) {
