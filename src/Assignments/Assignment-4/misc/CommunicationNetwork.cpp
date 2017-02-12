@@ -5,6 +5,8 @@
 //  Created by Sunil on 2/11/17.
 //  Copyright © 2017 Sunil. All rights reserved.
 //
+#include <fstream>
+#include <algorithm>
 
 #include "CommunicationNetwork.h"
 
@@ -21,7 +23,7 @@ CommunicationNetwork::~CommunicationNetwork() {
         return;
     }
     
-    City* prevCity = this->head;
+    CommunicationNetwork::ptr_type prevCity = this->head;
     
     while(prevCity) {
         this->head = this->head->next;
@@ -36,24 +38,24 @@ CommunicationNetwork::~CommunicationNetwork() {
 void CommunicationNetwork::addCity(std::string newCityName, std::string followingCityName) {
     if(!this->head) {
         // no network. Create a network with first city
-        this->head = new City(newCityName, nullptr, "");
+        this->head = new City<typename CommunicationNetwork::value_type>(newCityName, nullptr, "");
         this->tail = this->head;
         return;
     }
     
     if(followingCityName.empty()) {
         // if no following city is mentioned, then add to the tail
-        this->tail->next = new City(newCityName, nullptr, "");
+        this->tail->next = new City<typename CommunicationNetwork::value_type>(newCityName, nullptr, "");
         this->tail = this->tail->next;
         return;
     }
     
-    City* ptr = this->head;
+    CommunicationNetwork::ptr_type ptr = this->head;
     while(ptr->cityName != followingCityName) {
         ptr = ptr->next;
     }
     
-    City* newCity = new City(newCityName, ptr->next, "");
+    CommunicationNetwork::ptr_type newCity = new City<typename CommunicationNetwork::value_type>(newCityName, ptr->next, "");
     ptr->next = newCity;
 }
 
@@ -67,17 +69,34 @@ void CommunicationNetwork::buildNetwork() {
     }
 }
 
-void CommunicationNetwork::transmitMsg(char * msg) { //this is like a string
-    City* city = this->head;
-    if(!city) {
-        // no network
+void CommunicationNetwork::transmitMsg(char *filename) { //this is like a string
+    ifstream file(filename);
+    
+    // non-existant or corrupted file
+    if(file.fail()) {
         return;
     }
     
-    while(city) {
-        city->message = msg;
-        cout << city->cityName << " received " << city->message << endl;
-        city = city->next;
+    // no network
+    if(!this->head) {
+        cout << "Empty list" << endl;
+        return;
+    }
+    
+    std::string word;
+    while(std::getline(file, word, ' ')) {
+        // remove the newline from the word if it has.
+        word.erase(std::remove(word.begin(), word.end(), '\n'), word.end());
+        CommunicationNetwork::ptr_type receiver = this->head;
+        while(receiver) {
+            // set the message
+            receiver->message = word;
+            cout << receiver->cityName << " received " << receiver->message << endl;
+            
+            // delete the message
+            receiver->message = "";
+            receiver = receiver->next;
+        }
     }
 }
 
@@ -88,19 +107,6 @@ void CommunicationNetwork::printNetwork() {
         cout << city << " -> ";
     });
 
-//    City* city = this->head;
-//    while(city) {
-//        cout << city->cityName << " -> ";
-//        city = city->next;
-//    }
     cout << "NULL"<< endl;
     cout << "==================" << endl;
-}
-
-CommunicationNetwork::NetworkIterator CommunicationNetwork::begin() {
-    return NetworkIterator(this->head);
-}
-
-CommunicationNetwork::NetworkIterator CommunicationNetwork::end() {
-    return NetworkIterator();
 }

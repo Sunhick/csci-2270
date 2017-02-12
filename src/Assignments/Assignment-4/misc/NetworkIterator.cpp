@@ -8,41 +8,46 @@
 
 #include "NetworkIterator.h"
 
-CommunicationNetwork::NetworkIterator::NetworkIterator(CommunicationNetwork::ptr_type start) {
-    this->head = start;
-}
+/*********************************************************/
+/* Can't have implementation file for template class.    */
+/* Everything has to be in the same header file.         */
+/*********************************************************/
 
-CommunicationNetwork::NetworkIterator::NetworkIterator() {
-    this->head = nullptr;
-}
-
-CommunicationNetwork::NetworkIterator::~NetworkIterator() {
-    this->head = nullptr;
-}
-
-bool CommunicationNetwork::NetworkIterator::operator!=(const NetworkIterator& end) const {
-    return this->head != end.head;
-}
-
-bool CommunicationNetwork::NetworkIterator::operator==(const NetworkIterator& end) const {
-    return this->head == end.head;
-}
-
-CommunicationNetwork::value_type CommunicationNetwork::NetworkIterator::operator*() const {
-    return this->head->cityName;
-}
-
-CommunicationNetwork::ptr_type CommunicationNetwork::NetworkIterator::operator->() const {
-    return this->head;
-}
-
-CommunicationNetwork::NetworkIterator& CommunicationNetwork::NetworkIterator::operator++() {
-    this->head = this->head->next;
-    return *this;
-}
-
-CommunicationNetwork::NetworkIterator CommunicationNetwork::NetworkIterator::operator++(int) {
-    NetworkIterator temp(*this);
-    this->head = this->head->next;
-    return temp;
-}
+//NetworkIterator<T>::NetworkIterator(typename NetworkTypeTraits<T>::ptr_type start); {
+//    this->head = start;
+//}
+//
+//NetworkIterator::NetworkIterator() {
+//    this->head = nullptr;
+//}
+//
+//NetworkIterator::~NetworkIterator() {
+//    this->head = nullptr;
+//}
+//
+//bool NetworkIterator::operator!=(const NetworkIterator& end) const {
+//    return this->head != end.head;
+//}
+//
+//bool NetworkIterator::operator==(const NetworkIterator& end) const {
+//    return this->head == end.head;
+//}
+//
+//NetworkTypeTraits::value_type NetworkIterator::operator*() const {
+//    return this->head->cityName;
+//}
+//
+//NetworkTypeTraits::ptr_type NetworkIterator::operator->() const {
+//    return this->head;
+//}
+//
+//NetworkIterator& NetworkIterator::operator++() {
+//    this->head = this->head->next;
+//    return *this;
+//}
+//
+//NetworkIterator NetworkIterator::operator++(int) {
+//    NetworkIterator temp(*this);
+//    this->head = this->head->next;
+//    return temp;
+//}

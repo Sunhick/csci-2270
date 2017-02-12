@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 
 #include "CommunicationNetwork.h"
 
@@ -19,7 +20,7 @@ int main(int argc, const char * argv[]) {
     std::string dmenu = "======Main Menu======\n"
                         "1. Build Network\n"
                         "2. Print Network Path\n"
-                        "3. Trasmit message Coast-To-Coast\n"
+                        "3. Transmit Message Coast-To-Coast\n"
                         "4. Add City\n"
                         "5. Quit\n";
     
@@ -30,13 +31,19 @@ int main(int argc, const char * argv[]) {
     bool exit = false;
     
     while(std::cin >> option) {
+        
+        // flush the newlines and other characters
+        cin.clear();
+        cin.ignore();
+        
         switch (option) {
             case 1:
             {
                 comNet.buildNetwork();
+                comNet.printNetwork();
                 break;
             }
-            
+                
             case 2:
             {
                 comNet.printNetwork();
@@ -45,25 +52,20 @@ int main(int argc, const char * argv[]) {
                 
             case 3:
             {
-                cin.ignore();
-                std::string line;
-                std::getline(std::cin, line);
-                char *msg = new char[line.length()];
-                strcpy(msg, line.c_str());
-                comNet.transmitMsg(msg);
+                char *filename = new char[strlen(argv[1])];
+                strcpy(filename, argv[1]);
+                comNet.transmitMsg(filename);
                 break;
             }
                 
             case 4:
             {
-                cin.ignore();
-                std::string city, following;
-                cout << "City name:";
-                std::getline(std::cin, city);
-                cout << "Following City:";
-                std::getline(std::cin, following);
-                
-                comNet.addCity(city, following);
+                std::string cityNew, cityPrevious;
+                cout << "Enter a city name: " << endl;
+                std::getline(cin,cityNew);
+                cout << "Enter a previous city name: " << endl;
+                std::getline(cin,cityPrevious);
+                comNet.addCity(cityNew, cityPrevious);
                 break;
             }
                 
@@ -82,9 +84,6 @@ int main(int argc, const char * argv[]) {
         cout << dmenu;
     }
     
-    for(auto i : comNet) {
-        cout << i << endl;
-    }
-    
+    cout << "Goodbye!" << endl;
     return 0;
 }
