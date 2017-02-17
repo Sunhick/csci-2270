@@ -123,7 +123,8 @@ void CommunicationNetwork::deleteCity(std::string removeCity) {
     if(!ptr) return;
     
     if (ptr->previous) {
-        // if there's a previous node
+        // if there's a previous node.
+        // This also takes care of deleting the tail. (ptr->next will be nullptr)
         ptr->previous->next = ptr->next;
     } else {
         // no previous node. Has to be head node
