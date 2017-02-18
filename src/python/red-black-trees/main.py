@@ -35,5 +35,11 @@ def main():
     print("======post order========")
     trees.postorderTraversal(trees.Root, lambda node: print(node.Value, node.Color))
 
+    print("========DFS===========")
+    trees.dfs(trees.Root, lambda node: print(node.Value))
+
+    print("========BFS===========")
+    trees.bfs(trees.Root, lambda node: print(node.Value))
+
 if __name__ == '__main__':
     main()

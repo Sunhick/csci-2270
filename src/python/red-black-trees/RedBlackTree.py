@@ -11,6 +11,7 @@ __email__ = "suba5417@colorado.edu"
 
 from Node import Node
 from Node import Color
+from queue import *
 
 class RedBlackTree(object):
     __root = None
@@ -40,7 +41,7 @@ class RedBlackTree(object):
                     break;
                 temp = temp.Right
 
-        self.__balance()
+        self.__balanceTree()
 
     def inorderTraversal(self, node, func):
         if not node:
@@ -63,10 +64,32 @@ class RedBlackTree(object):
         self.postorderTraversal(node.Right, func)
         func(node)
 
+    def dfs(self, root, func):
+        stack = []
+        stack.append(root)
+        while stack:
+            node = stack.pop()
+            if node.Right:
+                stack.append(node.Right)
+            if node.Left:
+                stack.append(node.Left)
+            func(node)
+
+    def bfs(self, root, func):
+        q = Queue()
+        q.put(root)
+        while not q.empty():
+            node = q.get()
+            if node.Left:
+                q.put(node.Left)
+            if node.Right:
+                q.put(node.Right)
+            func(node)
+
     def deleteNode(self, value):
         pass
 
-    def __balance(self):
+    def __balanceTree(self):
         pass
 
     def search(self, value):
