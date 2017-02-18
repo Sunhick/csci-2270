@@ -20,6 +20,7 @@
 
 shared_ptr<Memcheck> Memcheck::memcheck(new Memcheck);
 
+// Don't track self calls.
 bool& selfCall() {
     static bool self = false;
     return self;
@@ -119,6 +120,7 @@ void Memcheck::UnTrack(void *address) {
 }
 
 Memcheck::~Memcheck() {
+    std::lock_guard<std::mutex> lock(access);
     if(chunks.size() > 0) {
         cout << "======================" << endl;
         cout << "Memory leaks! Missing deallocations for --" << endl;
@@ -128,6 +130,8 @@ Memcheck::~Memcheck() {
                  << " " << e.function << "()" << " size: " << e.size << " blocks" << endl;
             total += e.size;
         }
+        // Why can't i call clear. Figure out.
+        // chunks.clear();
         cout << "Total leak: " << total << " blocks" << endl;
         cout << "======================" << endl;
     }
