@@ -5,7 +5,6 @@
 //  Created by Sunil on 2/17/17.
 //  Copyright © 2017 Sunil. All rights reserved.
 //
-#include <mutex>
 #include <string>  
 #include <cstddef> 
 
@@ -26,7 +25,7 @@ bool& selfCall() {
     return self;
 }
 
-void* operator new(size_t block, const char *filename, int line) {
+void* operator new(size_t block, const char *filename, const char *func, int line) {
     auto tracker = Memcheck::Instance();
     if(selfCall() || tracker == nullptr) {
         return malloc(block);
@@ -34,7 +33,7 @@ void* operator new(size_t block, const char *filename, int line) {
         auto address = malloc(block);
         try {
             selfCall() = true;
-            tracker->Track(address, block, filename, line);
+            tracker->Track(address, block, filename, func, line);
             selfCall() = false;
             return address;
         } catch (...) {
@@ -44,19 +43,20 @@ void* operator new(size_t block, const char *filename, int line) {
     }
 }
 
-void* operator new[](size_t block, const char *filename, int line) {
-    return operator new(block, filename, line);
+void* operator new[](size_t block, const char *filename, const char *func, int line) {
+    return operator new(block, filename, func, line);
 }
 
-void deletep(const char *filename, int line) {
-    file = filename;
+void deletep(const char *filename="", const char *func="", int line=-1) {
+    pfile = filename;
     pline = line;
+    pfunc = func;
 }
 
 void operator delete(void *address) noexcept {
     try {
         auto tracker = Memcheck::Instance();
-        if(selfCall() || tracker == nullptr) {
+        if(selfCall() || tracker == nullptr || pline == -1) {
             free(address);
             return;
         }
@@ -65,6 +65,9 @@ void operator delete(void *address) noexcept {
         free(address);
         tracker->UnTrack(address);
         selfCall() = false;
+        pfile = "";
+        pfunc = "";
+        pline = -1;
     } catch(...) {
         // no exception
     }
@@ -82,7 +85,7 @@ void Memcheck::Debug(void *address, const char* file, int line) {
     cout << address << " Alloc'd in file: " << file << " at line: " << line << endl;
 }
 
-void Memcheck::Track(void *address, size_t block, const char* file, int line) {
+void Memcheck::Track(void *address, size_t block, const char* file, const char *func, int line) {
     std::string str(file);
     std::size_t found = str.find_last_of("/\\");
     cout << "Alloc'd " << str.substr(found+1) << ":" << line << " size: " << block << " blocks" << endl;
@@ -90,7 +93,8 @@ void Memcheck::Track(void *address, size_t block, const char* file, int line) {
     MemChunk chunk {
         .address = address,
         .size = block,
-        .file = std::string(file),
+        .filename = str.substr(found+1),
+        .function = func,
         .line = line
     };
     
@@ -100,8 +104,7 @@ void Memcheck::Track(void *address, size_t block, const char* file, int line) {
 void Memcheck::UnTrack(void *address) {
     auto chunk = std::find_if(std::begin(chunks), std::end(chunks), [=](MemChunk& e) -> bool {
         if (e.address == address) {
-            std::size_t found = e.file.find_last_of("/\\");
-            cout << "Dalloc'd " << e.file.substr(found+1) << ":" << e.line << " size: "
+            cout << "Dalloc'd " << e.filename << ":" << e.line << " size: "
                  << e.size << " blocks" << endl;
             
         }
@@ -118,12 +121,11 @@ void Memcheck::UnTrack(void *address) {
 Memcheck::~Memcheck() {
     if(chunks.size() > 0) {
         cout << "======================" << endl;
-        cout << "Memory leaks!" << endl;
+        cout << "Memory leaks! Missing deallocations for --" << endl;
         int total = 0;
-        for(auto& e : chunks) {
-            std::size_t found = e.file.find_last_of("/\\");
-            cout << "Alloc'd " << e.file.substr(found+1) << " : " << e.line << " size: " << e.size
-                 << " blocks" << endl;
+        for(auto&   e : memcheck->chunks) {
+            cout << "Alloc'd " << e.filename << ":" << e.line
+                 << " " << e.function << "()" << " size: " << e.size << " blocks" << endl;
             total += e.size;
         }
         cout << "Total leak: " << total << " blocks" << endl;
