@@ -62,7 +62,7 @@ class RedBlackTree(object):
         # if there's a red-red parent-child relation, then 
         # balance the red black tree.
         if (parent.Color == child.Color):
-            self.__balanceTree()
+            self.__balanceTree(parent, child)
 
     def inorderTraversal(self, node, callback):
         if not node:
@@ -110,13 +110,22 @@ class RedBlackTree(object):
     def deleteNode(self, value):
         pass
 
-    def __balanceTree(self):
+    def __balanceTree(self, parent, child):
         """
         case 1: If Parent and it's sibling are Red. Then recolor and check.
 
         case 2: If the Parent and it's sibling are Black/not present, Then rotate and recolor
         """
-        pass
+        if (not parent.Parent):
+            return
+
+        pSibling = parent.Parent.Right
+        if (pSibling and pSibling.Color == parent.Color):
+            # recolor
+            parent.Color = Color.Black
+            pSibling.Color = Color.Black
+            return self.__balanceTree(parent.Parent, None)
+
 
     def search(self, value):
         pass
