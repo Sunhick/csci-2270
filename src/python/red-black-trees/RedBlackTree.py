@@ -10,6 +10,7 @@ __author__ = "Sunil"
 __email__ = "suba5417@colorado.edu"
 
 from Node import Node
+from Node import Color
 
 class RedBlackTree(object):
     __root = None
@@ -30,7 +31,7 @@ class RedBlackTree(object):
         while(temp):
             if temp.Value > value:
                 if not temp.Left:
-                    temp.Left = Node(value)
+                    temp.Left = Node(value=value)
                     break;
                 temp = temp.Left
             else:
@@ -45,13 +46,13 @@ class RedBlackTree(object):
         if not node:
             return
         self.inorderTraversal(node.Left, func)
-        func(node.Value)
+        func(node)
         self.inorderTraversal(node.Right, func)
 
     def preorderTraversal(self, node, func):
         if not node:
             return
-        func(node.Value)
+        func(node)
         self.preorderTraversal(node.Left, func)
         self.preorderTraversal(node.Right, func)
 
@@ -60,7 +61,7 @@ class RedBlackTree(object):
             return
         self.postorderTraversal(node.Left, func)
         self.postorderTraversal(node.Right, func)
-        func(node.Value)
+        func(node)
 
     def deleteNode(self, value):
         pass

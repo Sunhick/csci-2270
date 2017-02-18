@@ -6,9 +6,16 @@ Node definition
 Pythonic implementation of red black trees
 """
 
+from enum import Enum
+
+class Color(Enum):
+    Red = 1
+    Black = 0
+    Invalid = 10
+
 class Node(object):
     __left = __right = __color = __value = None
-    def __init__(self, value, left=None, right=None, color=None):
+    def __init__(self, value, left=None, right=None, color=Color.Invalid):
         self.__left = left
         self.__right = right
         self.__color = color
@@ -45,3 +52,10 @@ class Node(object):
     @Value.setter
     def Value(self, left):
         self.__value = value
+
+    def FlipColor(self):
+        if self.__color == Color.Red:
+            self.__color = Color.Black
+        
+        if self.__color == Color.Black:
+            self.__color = Color.Red

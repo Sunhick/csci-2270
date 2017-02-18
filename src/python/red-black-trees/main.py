@@ -27,13 +27,13 @@ def main():
     trees.insertNode(90)
 
     print("======in order========")
-    trees.inorderTraversal(trees.Root, lambda x: print(x))
+    trees.inorderTraversal(trees.Root, lambda node: print(node.Value))
     
     print("======pre order========")
-    trees.preorderTraversal(trees.Root, lambda x: print(x))
+    trees.preorderTraversal(trees.Root, lambda node: print(node.Value))
 
     print("======post order========")
-    trees.postorderTraversal(trees.Root, lambda x: print(x))
+    trees.postorderTraversal(trees.Root, lambda node: print(node.Value, node.Color))
 
 if __name__ == '__main__':
     main()
