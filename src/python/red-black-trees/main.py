@@ -27,19 +27,19 @@ def main():
     trees.insertNode(90)
 
     print("======in order========")
-    trees.inorderTraversal(trees.Root, lambda node: print(node.Value))
+    trees.inorderTraversal(trees.Root, lambda node: print(node.Value, node.Color))
     
     print("======pre order========")
-    trees.preorderTraversal(trees.Root, lambda node: print(node.Value))
+    trees.preorderTraversal(trees.Root, lambda node: print(node.Value, node.Color))
 
     print("======post order========")
     trees.postorderTraversal(trees.Root, lambda node: print(node.Value, node.Color))
 
     print("========DFS===========")
-    trees.dfs(trees.Root, lambda node: print(node.Value))
+    trees.dfs(trees.Root, lambda node: print(node.Value, node.Color))
 
     print("========BFS===========")
-    trees.bfs(trees.Root, lambda node: print(node.Value))
+    trees.bfs(trees.Root, lambda node: print(node.Value, node.Color))
 
 if __name__ == '__main__':
     main()

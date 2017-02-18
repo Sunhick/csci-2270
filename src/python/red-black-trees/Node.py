@@ -7,6 +7,7 @@ Pythonic implementation of red black trees
 """
 
 from enum import Enum
+from functools import partial
 
 class Color(Enum):
     Red = 1
@@ -14,12 +15,18 @@ class Color(Enum):
     Invalid = 10
 
 class Node(object):
-    __left = __right = __color = __value = None
-    def __init__(self, value, left=None, right=None, color=Color.Invalid):
+    __left = None
+    __right = None
+    __color = None
+    __value = None
+    __parent = None
+
+    def __init__(self, value, left=None, right=None, parent=None, color=Color.Invalid):
         self.__left = left
         self.__right = right
         self.__color = color
         self.__value = value
+        self.__parent = parent
 
     @property
     def Left(self):
@@ -53,9 +60,17 @@ class Node(object):
     def Value(self, left):
         self.__value = value
 
+    @property
+    def Parent(self):
+        return self.__parent
+
     def FlipColor(self):
         if self.__color == Color.Red:
             self.__color = Color.Black
         
         if self.__color == Color.Black:
             self.__color = Color.Red
+
+# Vanilla nodes
+RedNode = partial(Node, color=Color.Red)
+BlackNode = partial(Node, color=Color.Black)

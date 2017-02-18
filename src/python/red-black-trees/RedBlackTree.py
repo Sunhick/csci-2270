@@ -9,12 +9,20 @@ Pythonic implementation of red black trees
 __author__ = "Sunil"
 __email__ = "suba5417@colorado.edu"
 
-from Node import Node
+from Node import RedNode, BlackNode
 from Node import Color
 from queue import *
 
 class RedBlackTree(object):
+    """
+    Red black tree invariant:
+        * Root should always be black.
+        * Every node is either black / red.
+        * No Red-Red Parent-child relation.
+        * Every simple path from a node to a descendant leaf contains the same number of black nodes.
+    """
     __root = None
+    __count = 0
     def __init__(self):
         pass
 
@@ -22,49 +30,62 @@ class RedBlackTree(object):
     def Root(self):
         return self.__root
 
+    @property
+    def Count(self):
+        return self.__count
+
     def insertNode(self, value):
         if not self.__root:
-            self.__root = Node(value)
+            # no root node. Create a black root node
+            self.__root = BlackNode(value=value)
+            self.__count += 1
             return
 
-        # insert node into BST
-        temp = self.__root
-        while(temp):
-            if temp.Value > value:
-                if not temp.Left:
-                    temp.Left = Node(value=value)
+        # insert new red node into BST
+        self.__count += 1
+        parent = self.__root
+        child = None
+        while(parent):
+            if parent.Value > value:
+                if not parent.Left:
+                    child = RedNode(value=value, parent=parent)
+                    parent.Left = child
                     break;
-                temp = temp.Left
+                parent = parent.Left
             else:
-                if not temp.Right:
-                    temp.Right = Node(value)
+                if not parent.Right:
+                    child = RedNode(value=value, parent=parent)
+                    parent.Right = child
                     break;
-                temp = temp.Right
+                parent = parent.Right
 
-        self.__balanceTree()
+        # if there's a red-red parent-child relation, then 
+        # balance the red black tree.
+        if (parent.Color == child.Color):
+            self.__balanceTree()
 
-    def inorderTraversal(self, node, func):
+    def inorderTraversal(self, node, callback):
         if not node:
             return
-        self.inorderTraversal(node.Left, func)
-        func(node)
-        self.inorderTraversal(node.Right, func)
+        self.inorderTraversal(node.Left, callback)
+        callback(node)
+        self.inorderTraversal(node.Right, callback)
 
-    def preorderTraversal(self, node, func):
+    def preorderTraversal(self, node, callback):
         if not node:
             return
-        func(node)
-        self.preorderTraversal(node.Left, func)
-        self.preorderTraversal(node.Right, func)
+        callback(node)
+        self.preorderTraversal(node.Left, callback)
+        self.preorderTraversal(node.Right, callback)
 
-    def postorderTraversal(self, node, func):
+    def postorderTraversal(self, node, callback):
         if not node:
             return
-        self.postorderTraversal(node.Left, func)
-        self.postorderTraversal(node.Right, func)
-        func(node)
+        self.postorderTraversal(node.Left, callback)
+        self.postorderTraversal(node.Right, callback)
+        callback(node)
 
-    def dfs(self, root, func):
+    def dfs(self, root, callback):
         stack = []
         stack.append(root)
         while stack:
@@ -73,9 +94,9 @@ class RedBlackTree(object):
                 stack.append(node.Right)
             if node.Left:
                 stack.append(node.Left)
-            func(node)
+            callback(node)
 
-    def bfs(self, root, func):
+    def bfs(self, root, callback):
         q = Queue()
         q.put(root)
         while not q.empty():
@@ -84,12 +105,17 @@ class RedBlackTree(object):
                 q.put(node.Left)
             if node.Right:
                 q.put(node.Right)
-            func(node)
+            callback(node)
 
     def deleteNode(self, value):
         pass
 
     def __balanceTree(self):
+        """
+        case 1: If Parent and it's sibling are Red. Then recolor and check.
+
+        case 2: If the Parent and it's sibling are Black/not present, Then rotate and recolor
+        """
         pass
 
     def search(self, value):
