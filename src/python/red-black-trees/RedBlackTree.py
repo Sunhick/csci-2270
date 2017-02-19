@@ -61,8 +61,8 @@ class RedBlackTree(object):
 
         # if there's a red-red parent-child relation, then 
         # balance the red black tree.
-        if (parent.Color == child.Color):
-            self.__balanceTree(parent, child)
+        # if (parent.Color == child.Color):
+        #     self.__balanceTree(parent, child)
 
     def inorderTraversal(self, node, callback):
         if not node:
@@ -110,22 +110,45 @@ class RedBlackTree(object):
     def deleteNode(self, value):
         pass
 
-    def __balanceTree(self, parent, child):
+    def __recoloring(self, grandparent, parent):
+        # If the parent's sibling is Red, then recolor
+        if not grandparent:
+            return
+
+        sibling = grandparent.Right if grandparent.Left == parent else grandparent.Left
+        if not sibling:
+            # this shouldn't be called if no sibling exists! Rotation required
+            return
+
+        sibling.FlipColor()
+        parent.FlipColor()
+        grandparent.FlipColor()
+
+        self.__recoloring(grandparent.Parent, grandparent)
+
+    def __rotate(self, grandparent, parent):
+        # case-1: Left Left case
+        # case-2: Left Right case
+        # case-3: Right Right case
+        # case-4: Right Left case
+        pass
+
+
+    def __balanceTree(self, grandparent, parent, child):
         """
         case 1: If Parent and it's sibling are Red. Then recolor and check.
 
         case 2: If the Parent and it's sibling are Black/not present, Then rotate and recolor
         """
-        if (not parent.Parent):
+        if (not grandparent):
             return
 
-        pSibling = parent.Parent.Right
-        if (pSibling and pSibling.Color == parent.Color):
-            # recolor
-            parent.Color = Color.Black
-            pSibling.Color = Color.Black
-            return self.__balanceTree(parent.Parent, None)
+        uncle = grandparent.Right
+        if (uncle and uncle.Color == parent.Color):
+            return self.__recoloring(grandparent, parent)
 
+        # If the uncle is black then rotate/recolor accordingly
+        return self.__rotate(grandparent, parent)
 
     def search(self, value):
         pass
