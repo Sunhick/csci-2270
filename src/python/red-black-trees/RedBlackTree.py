@@ -59,10 +59,7 @@ class RedBlackTree(object):
                     break;
                 parent = parent.Right
 
-        # if there's a red-red parent-child relation, then 
-        # balance the red black tree.
-        # if (parent.Color == child.Color):
-        #     self.__balanceTree(parent, child)
+        self.__balanceTree(parent.Parent, parent, child)
 
     def inorderTraversal(self, node, callback):
         if not node:
@@ -110,6 +107,12 @@ class RedBlackTree(object):
     def deleteNode(self, value):
         pass
 
+    def __validRedBlackTree(self):
+        """
+            Determine if a given tree is a valid Red black tree
+        """
+        pass
+
     def __recoloring(self, grandparent, parent):
         # If the parent's sibling is Red, then recolor
         if not grandparent:
@@ -126,13 +129,73 @@ class RedBlackTree(object):
 
         self.__recoloring(grandparent.Parent, grandparent)
 
-    def __rotate(self, grandparent, parent):
-        # case-1: Left Left case
-        # case-2: Left Right case
-        # case-3: Right Right case
-        # case-4: Right Left case
-        pass
+    def __rotate(self, grandparent, parent, child):
+        if (not grandparent):
+            return
 
+        leftParent = grandparent.Left == parent
+        leftChild = parent.Left == child
+        uncle = grandparent.Right if leftParent else grandparent.Left
+
+        # case-1: Left Left case
+        if (leftParent and leftChild):
+            grandgrandParent = grandparent.Parent
+            parentRight = parent.Right
+            parent.Right = grandparent
+            grandparent.Parent = parent
+            grandparent.Left = parentRight
+            parentRight.Parent = grandparent
+            parent.FlipColor()
+            grandparent.FlipColor()
+
+            if (grandgrandParent):
+                if grandgrandParent.Left == grandparent:
+                    grandgrandParent.Left = parent
+                else:
+                    grandgrandParent.Right = parent
+                parent.Parent = grandgrandParent
+                self.__balanceTree(parent.Parent.Parent, parent.Parent, parent)
+            return
+        
+        # case-2: Left Right case
+        if (leftParent and not leftChild):
+            parent.Right = child.Left
+            child.Left.Parent = parent
+            child.Left = parent
+            child.Parent = parent.Parent
+            parent.Parent = child
+            self.__balanceTree(chid.Parent,child, parent)
+            return
+
+        # case-3: Right Right case
+        if (not leftParent and not leftChild):
+            grandgrandParent = grandparent.Parent
+            parentLeft = parent.Left
+            parent.Left = grandparent
+            grandparent.Parent = parent
+            grandparent.Right = parentLeft
+            parentLeft.Parent = grandparent
+            parent.FlipColor()
+            grandparent.FlipColor()
+
+            if (grandgrandParent):
+                if grandgrandParent.Left == grandparent:
+                    grandgrandParent.Left = parent
+                else:
+                    grandgrandParent.Right = parent
+                parent.Parent = grandgrandParent
+                self.__balanceTree(parent.Parent.Parent, parent.Parent, parent)
+            return
+
+        # case-4: Right Left case
+        if (not leftParent and leftChild):
+            parent.Left = child.Right
+            child.Right.Parent = parent
+            child.Right = parent
+            child.Parent = parent.Parent
+            parent.Parent = child
+            self.__balanceTree(child.Parent,child, parent)
+            return
 
     def __balanceTree(self, grandparent, parent, child):
         """
@@ -148,7 +211,7 @@ class RedBlackTree(object):
             return self.__recoloring(grandparent, parent)
 
         # If the uncle is black then rotate/recolor accordingly
-        return self.__rotate(grandparent, parent)
+        return self.__rotate(grandparent, parent, child)
 
     def search(self, value):
         pass
