@@ -24,13 +24,7 @@ CommunicationNetwork::~CommunicationNetwork() {
         return;
     }
     
-    City *prevCity = this->head;
-    
-    while(prevCity) {
-        this->head = this->head->next;
-        delete prevCity;
-        prevCity = this->head;
-    }
+    this->deleteNetwork();
     
     this->head = nullptr;
     this->tail = nullptr;
@@ -105,11 +99,12 @@ void CommunicationNetwork::printNetwork() {
     City *city = this->head;
     
     cout << "===CURRENT PATH===" << endl;
-    while(city) {
+    cout << "NULL <- ";
+    while(city->next) {
         cout << city->cityName << " <-> ";
         city = city->next;
     }
-    cout << "NULL"<< endl;
+    cout << city->cityName << " -> NULL"<< endl;
     cout << "==================" << endl;
 }
 

@@ -26,7 +26,6 @@ struct City{
         previous = initPrevious;
         message = initMessage;
     }
-    
 };
 
 class CommunicationNetwork
