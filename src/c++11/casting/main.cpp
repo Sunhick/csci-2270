@@ -77,8 +77,22 @@ void fake(Doppelganger* p) {
     }
 }
 
-// static_cast
+// static_cast: aware of narrowing
+// caution: Also works if dynamic types are known and gaurenteed at runtime
+void convert(float f) {
+    int v = static_cast<int>(f);
+    cout << "val = " << v << endl;
+}
 
+// dynamic_cast used for downcasts/ crosscasts on related types(class hierarchy).
+// works only on pointers
+void downcast(base* b) {
+    derived* d = dynamic_cast<derived*>(b);
+    if (d) {
+        d->extraPrint();
+        d->print();
+    }
+}
 
 int main(int argc, const char * argv[]) {
     
@@ -97,6 +111,28 @@ int main(int argc, const char * argv[]) {
         
         Doppelganger f("Hello",98);
         fake(&f);
+    }
+    cout << "-----------------" << endl;
+
+    cout << "static_cast example" << endl;
+    {
+        float d = 45.454656;
+        convert(d);
+    }
+    cout << "-----------------" << endl;
+    
+    cout << "dynamic_cast example" << endl;
+    {
+        auto b = new derived("hello");
+        downcast(b);
+        delete b;
+        
+        Person p = {"Sunil", 56};
+        // Doppelganger* d = dynamic_cast<Doppelganger*>(&p); // error . unrelated types
+        Doppelganger* d = reinterpret_cast<Doppelganger*>(&p);
+        if(d) {
+            cout << d->name << d->id << d->fake << endl;
+        }
     }
     cout << "-----------------" << endl;
     
