@@ -19,7 +19,7 @@ using namespace Family;
 int main(int argc, const char * argv[]) {
     // cout << getcwd(nullptr, 0) << endl;
     
-    Logger log("/Users/Sunny/prv/tmp/SmartPointers/log.txt");
+    Logger log("log.txt");
     log << "Hello Sunil" << "Another log";
     log << "Hello Welcome to word" << "Welcome log";
     
@@ -37,8 +37,8 @@ int main(int argc, const char * argv[]) {
         john->PrintCouples();
         mary->PrintCouples();
         
-        cout << john.use_count() << endl;
-        cout << mary.use_count() << endl;
+        cout << "use count: " << john.use_count() << endl;
+        cout << "use count: " << mary.use_count() << endl;
     }
     
     return 0;

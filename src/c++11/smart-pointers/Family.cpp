@@ -24,17 +24,20 @@ Husband::Husband(std::string name, std::shared_ptr<Wife> wife) {
 }
 
 Husband::~Husband() {
-    auto temp = wife.lock();
-    if(temp)
+    if(!wife.expired()) {
+        auto temp = wife.lock();
         cout << "Wife address: " << temp.get() << endl;
+    }
     cout << "husband dtor" << this << endl;
 }
 
 void Husband::PrintCouples() {
     cout << "Husband: " << name << endl;
-    auto temp = wife.lock();
-    if(temp)
+    if(!wife.expired()) {
+        auto temp = wife.lock();
         cout << "Wife: " << temp->Name() << endl;
+        cout << "use count: " << temp.use_count() << endl;
+    }
 }
 
 std::string Husband::Name() {
@@ -61,17 +64,20 @@ Wife::Wife(std::string name, std::shared_ptr<Husband> husband) {
 }
 
 Wife::~Wife() {
-    auto temp = husband.lock();
-    if(temp)
+    if(!husband.expired()) {
+        auto temp = husband.lock();
         cout << "Husband address: " << temp.get() << endl;
+    }
     cout << "wife dtor" << this << endl;
 }
 
 void Wife::PrintCouples() {
     cout << "Wife: " << name << endl;
-    auto temp = husband.lock();
-    if(temp)
+    if(!husband.expired()) {
+        auto temp = husband.lock();
         cout << "Husband: " << temp->Name() << endl;
+        cout << "use count: " << temp.use_count() << endl;
+    }
 }
 
 std::string Wife::Name() {
