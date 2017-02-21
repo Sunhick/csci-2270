@@ -20,7 +20,8 @@ namespace Logging {
     class Logger {
     private:
         std::string id;
-        std::unique_ptr<std::ofstream> file;
+        using StreamType = std::ofstream;
+        std::unique_ptr<StreamType, std::function<void(StreamType*)>> file;
         std::mutex access;
         
     public:

@@ -41,5 +41,15 @@ int main(int argc, const char * argv[]) {
         cout << "use count: " << mary.use_count() << endl;
     }
     
+    std::cout << "Custom deleter with shared_ptr" << endl;
+    {
+        shared_ptr<Husband> joe(new Husband("joe"), [](Husband* person) {
+            cout << "Deleting shared_ptr" << endl;
+            delete person;
+        });
+        
+        joe->PrintCouples();
+    }
+    
     return 0;
 }

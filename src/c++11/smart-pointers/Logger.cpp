@@ -15,9 +15,16 @@
 using namespace Logging;
 
 Logger::Logger(std::string filename) {
+    auto deleter = [](std::ofstream* file) -> void {
+        std::cout << "Deleting file object" << std::endl;
+        delete file;
+    };
+    
+    // std::cout << typeid(decltype(deleter)).name() << std::endl;
+    
     std::time_t result = std::time(nullptr);
     id = std::asctime(std::localtime(&result));
-    file = std::unique_ptr<std::ofstream>(new std::ofstream);
+    file = std::unique_ptr<std::ofstream, std::function<void(std::ofstream*)>>(new std::ofstream, deleter);
     file->open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
 }
 
