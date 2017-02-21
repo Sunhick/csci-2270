@@ -24,7 +24,7 @@ Logger::Logger(std::string filename) {
     
     std::time_t result = std::time(nullptr);
     id = std::asctime(std::localtime(&result));
-    file = std::unique_ptr<std::ofstream, std::function<void(std::ofstream*)>>(new std::ofstream, deleter);
+    file = std::unique_ptr<StreamType, std::function<void(StreamType*)>>(new StreamType, deleter);
     file->open(filename, std::fstream::in | std::fstream::out | std::fstream::app);
 }
 
