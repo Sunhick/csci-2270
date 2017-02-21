@@ -28,13 +28,18 @@ int main(int argc, const char * argv[]) {
     log2 << "Other logger 2";
     // log << "Hello Sunil" << "Another log"; Error. log object is scarred.
     
-    shared_ptr<Wife> mary(new Wife("mary"));
-    shared_ptr<Husband> john(new Husband("John", mary));
-    mary->SetHusband(john);
-    
-    john->PrintCouples();
-    mary->PrintCouples();
-    
+    std::cout << "Breaking cyclic dependency using weak pointers" << endl;
+    {
+        shared_ptr<Wife> mary(new Wife("mary"));
+        shared_ptr<Husband> john(new Husband("John", mary));
+        mary->SetHusband(john);
+        
+        john->PrintCouples();
+        mary->PrintCouples();
+        
+        cout << john.use_count() << endl;
+        cout << mary.use_count() << endl;
+    }
     
     return 0;
 }
