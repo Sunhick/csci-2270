@@ -47,13 +47,14 @@ int main(int argc, const char * argv[]) {
     
     // why can't i perform direct + operator
     // auto t1 = 12.12_km + 23.23_mi;
+    // Because of missing operator+ with move semantics.
+
     auto k = 12.12_km;
     auto l = 23.23_mi;
     auto t1 = k + l;
     cout << t1.getMiles() << endl;
     
     auto t2 = 12.12_km + 23.23_mi;
-    
     cout << Length<>(23.23).getMiles() << endl;
     
     
