@@ -39,6 +39,31 @@ LengthDouble operator"" _mi(long double value) {
     return LengthDouble(value, Distance::Miles);
 }
 
+unsigned long long int operator"" _b(const char* bits) {
+    unsigned acc = 0;
+    while(*bits) {
+        if (*bits == '1' || *bits == '0') {
+            acc  = (acc << 1) + (*bits-'0');
+        } else {
+            throw std::runtime_error("Invalid binary digits!");
+        }
+        bits++;
+    }
+    return acc;
+}
+
+void increment(int& x) {
+    ++x;
+}
+
+template<typename T>
+function<void(void)> callback(std::function<void(T&)> f, T&& val) {
+    auto k = [&]() {
+        f(val);
+    };
+    return k;
+}
+
 int main(int argc, const char * argv[]) {
     auto a = Length<int>(30);
     auto b = Length<int>(10);
@@ -57,6 +82,28 @@ int main(int argc, const char * argv[]) {
     auto t2 = 12.12_km + 23.23_mi;
     cout << Length<>(23.23).getMiles() << endl;
     
+    std::cout << "Another example of user defined literal" << endl;
+    {
+        auto acc = 1111_b;
+        // auto acc2 = 1411_b;  // runtime error
+        cout << acc << endl;
+    }
+    
+    std::cout << "std::ref usage" << endl;
+    {
+        int val = 34;
+        int& rval = std::ref(val);
+        rval = 45;
+        cout << rval << " " << val << endl;
+        
+        int i = 9;
+        auto f = std::bind(increment, std::ref(i));
+        f();
+        auto invoke = callback<int&>(increment, i);
+        invoke();
+        
+        cout << i << endl;
+    }
     
     return 0;
 }
