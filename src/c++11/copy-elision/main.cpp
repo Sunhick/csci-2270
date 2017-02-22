@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-
+#include <cassert>
 #include "Book.hpp"
 
 using namespace std;
@@ -33,7 +33,22 @@ void process2() noexcept(false) {
     throw b;
 }
 
+template<class T, template<T value> class V>
+struct negate2 {
+    static const T value = -value;
+};
 
+template<class T, T v>
+struct negate3 {
+    static const T value = -v;
+};
+
+template<class T>
+struct negate4 {
+    T operator()(T v) {
+        return static_cast<T>(-v);
+    }
+};
 
 int main() {
     std::cout << "Copy elision: Is a copy omission."
@@ -63,6 +78,24 @@ int main() {
             cout << "caught" << endl;
         }
     }
+    
+    // cout << negate2<-23>::value << endl << negate2<23>::value << endl;
+    cout << negate3<int, 45>::value << endl;
+    
+    // cout << negate3<double, -45.4545>::value << endl; // error: float , char* cann't be template params
+    // cout << negate4<double>(-45.4545) << endl;
+    cout << negate4<double>()(67.67676767) << endl;
+    
+    // no narrowing c++ {} initialization
+    // int x {45.45};  // error
+    // cout << x << endl;
+    
+    int *p = new int;
+    // runtime time assert
+    assert(p != nullptr);
+    
+    // compile time assert
+    static_assert(sizeof(int*)==8, "pointer size should 8 bytes!");
 
     return 0;
 }
