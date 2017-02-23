@@ -96,9 +96,12 @@ void CommunicationNetwork::transmitMsg(char * filename) { //this is like a strin
 }
 
 void CommunicationNetwork::printNetwork() {
-    City *city = this->head;
-    
     cout << "===CURRENT PATH===" << endl;
+    if (this->head == nullptr) {
+        cout << "NULL" << endl;
+        return;
+    }
+    City *city = this->head;
     cout << "NULL <- ";
     while(city->next) {
         cout << city->cityName << " <-> ";
