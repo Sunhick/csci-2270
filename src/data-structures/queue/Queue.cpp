@@ -22,7 +22,10 @@ Queue<T>::Queue() {
 
 template<typename T>
 Queue<T>::~Queue() {
-    reset();
+    head = 0;
+    tail = 0;
+    filled = 0;
+    container = nullptr;
 }
 
 template<typename T>
