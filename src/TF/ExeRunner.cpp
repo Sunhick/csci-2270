@@ -14,7 +14,11 @@
 #include <array>
 #include <exception>
 #include <algorithm>
+#include <fstream>
+#include <stdexcept>
 
+#include <sys/stat.h>
+#include <dirent.h>
 #include <execinfo.h>
 
 ExeRunner::ExeRunner(std::string exeName) {
@@ -31,8 +35,20 @@ void ExeRunner::RunWithCmdLine(std::vector<std::string> args) {
 
 void ExeRunner::Execute() noexcept(true) {
     try {
-        constexpr int buffSize = 512;
+        std::ifstream file(exeName);
+        if(file.fail()) {
+            throw std::runtime_error("File doesn't exists!");
+        }
         
+        struct stat sb;
+        if(stat(exeName.c_str(), &sb) != 0 || !(sb.st_mode & S_IXUSR)) {
+            throw std::runtime_error("File is not executable!");
+        }
+        if(sb.st_mode & S_IFDIR) {
+            throw std::runtime_error("You passed a directory!");
+        }
+        
+        constexpr int buffSize = 512;
         std::array<char, buffSize> buffer;
         std::shared_ptr<FILE> pipe(popen(exeName.c_str(), "r"), pclose);
         if (!pipe) throw std::runtime_error("popen() failed!");
@@ -40,7 +56,7 @@ void ExeRunner::Execute() noexcept(true) {
             if(fgets(buffer.data(), buffSize, pipe.get()) != nullptr)
                 output += buffer.data();
         }
-    } catch(std::exception e) {
+    } catch(const std::exception& e) {
         hasErrors = true;
         errors = e.what();
     }
@@ -55,7 +71,7 @@ void ExeRunner::Execute() noexcept(true) {
 }
 
 bool ExeRunner::HasErrors() noexcept(true) {
-    return false;
+    return hasErrors;
 }
 
 bool ExeRunner::RanWithNoErrors() noexcept(true) {
@@ -64,4 +80,8 @@ bool ExeRunner::RanWithNoErrors() noexcept(true) {
 
 std::string ExeRunner::GetOutput() noexcept(true) {
     return output;
+}
+
+std::string ExeRunner::GetErrors() noexcept(true) {
+    return errors;
 }

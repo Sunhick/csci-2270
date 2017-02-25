@@ -32,6 +32,8 @@ public:
     void RunWithCmdLine(std::vector<std::string>);
     bool HasErrors() noexcept(true);
     bool RanWithNoErrors() noexcept(true);
+    
+    std::string GetErrors() noexcept(true);
     std::string GetOutput() noexcept(true);
 };
 

@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "ExeRunner.hpp"
-#include "ColorConsole.hpp"
+#include "TermColor.hpp"
 
 using namespace std;
 
@@ -26,23 +26,33 @@ int main(int argc, const char * argv[]) {
         return 0;
     }
     
-    cout << GREEN;
-    cout << endl << "Executable name: " << argv[1] << endl;
+    cout << endl << "=============== ARGS ===============" << endl;
+    cout << "Executable name: " << termcolor::green << argv[1] << termcolor::reset << endl;
     cout << "Command line arguments: ";
     int count = 2;
+    cout << termcolor::green;
     while (count < argc) {
         cout << argv[count++] << " ";
     }
-    cout << endl << RESET;
+    cout << termcolor::reset << endl;
     
     ExeRunner runner(argv[1]);
     runner.RunWithCmdLine({""});
     
-    if(!runner.HasErrors()) {
-        // compare output
-        cout << BLUE << runner.GetOutput() << RESET << endl;
-        cout << BOLDGREEN << "** All test cases passed **" << RESET << endl;
+    cout << endl << "=============== ERRORS ===============" << endl;
+    if(runner.HasErrors()) {
+        cout << termcolor::bold << termcolor::red << "Error running '" << argv[1] << "' program" << termcolor::reset << endl;
+        cout << termcolor::red << runner.GetErrors() << termcolor::reset << endl;
+        cout << termcolor::red << runner.GetOutput() << termcolor::reset << endl;
+        return 0;
+    } else {
+        cout << termcolor::green << "No errors! :) " << termcolor::reset << endl;
     }
+    
+    cout << endl << "=============== OUTPUT ===============" << endl;
+    // compare output
+    cout << termcolor::blue << runner.GetOutput() << RESET << endl;
+    cout << termcolor::green << termcolor::bold << "** All test cases passed **" << RESET << endl;
     
     return 0;
 }
