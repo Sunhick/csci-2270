@@ -65,14 +65,25 @@ int main(int argc, const char * argv[]) {
         strs.Enqueue("Hello 9");
         strs.Enqueue("Hello 10");
         
-        Queue<string> p(std::move(strs));
+        Queue<string> p((strs));
+        
+        while(!strs.isEmpty()) {
+            try {
+                cout << strs.Dequeue() << endl;
+                cout << strs.Dequeue() << endl;
+                strs.Enqueue("Dequeue print");
+
+            } catch (const char* error) {
+                cout << error << endl;
+            }
+        }
         
         while(!p.isEmpty()) {
             try {
                 cout << p.Dequeue() << endl;
                 cout << p.Dequeue() << endl;
                 p.Enqueue("Dequeue print");
-
+                
             } catch (const char* error) {
                 cout << error << endl;
             }

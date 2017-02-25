@@ -26,13 +26,12 @@ Queue<T>::~Queue() {
 }
 
 template<typename T>
-Queue<T>::Queue(Queue<T>& queue) {
-    auto elements = queue.get();
-    auto n = queue.filled;
+Queue<T>::Queue(Queue<T>& queue) : Queue() {
+    auto elements = queue.container.get();
     
-    while(n > 0) {
-        Enqueue(elements[n]);
-        n--;
+    int index = 0;
+    while(index < queue.filled) {
+        Enqueue(elements[index++]);
     }
 }
 
