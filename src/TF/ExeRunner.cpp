@@ -34,7 +34,7 @@ void ExeRunner::Execute() noexcept(true) {
         constexpr int buffSize = 512;
         
         std::array<char, buffSize> buffer;
-        std::shared_ptr<FILE> pipe(popen("/Users/Sunny/prv/tmp/Queue/Queue/queue", "r"), pclose);
+        std::shared_ptr<FILE> pipe(popen(exeName.c_str(), "r"), pclose);
         if (!pipe) throw std::runtime_error("popen() failed!");
         while (!feof(pipe.get())) {
             if(fgets(buffer.data(), buffSize, pipe.get()) != nullptr)
