@@ -44,7 +44,11 @@ Queue<T>::Queue(Queue<T>&& queue) {
     filled = queue.filled;
     head = queue.head;
     tail = queue.tail;
-    queue.reset();
+
+    queue.head = 0;
+    queue.tail = 0;
+    queue.filled = 0;
+    queue.container = nullptr;
 }
 
 template<typename T>
