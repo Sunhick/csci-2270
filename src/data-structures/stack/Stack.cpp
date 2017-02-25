@@ -59,6 +59,11 @@ typename Stack<T>::ElementType Stack<T>::Pop() {
 
 template<typename T>
 typename Stack<T>::ElementType Stack<T>::Peek() {
+    if(isEmpty()) {
+        throw "Stack is empty";
+    }
+    
+    return container.get()[count-1];
 }
 
 template<typename T>
