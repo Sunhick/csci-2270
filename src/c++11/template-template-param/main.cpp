@@ -30,7 +30,8 @@ int main(int argc, const char * argv[]) {
         using valuetype = string;
         
         // Map<int, string, Container> dicts;
-        Map<keytype, valuetype, Container> dicts;
+        // Map<keytype, valuetype, Container> dicts;
+        Map<keytype, valuetype> dicts;
         
         dicts[1] = "Global.map.1";
         dicts[14] = "Global.map.14";

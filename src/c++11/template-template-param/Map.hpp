@@ -25,7 +25,7 @@ public:
 };
 
 // construct a Map
-template<typename KeyType, typename ValueType, template<typename> class Array>
+template<typename KeyType, typename ValueType, template<typename> class Array = Container>
 class Map {
 private:
     Array<KeyType> keys;
