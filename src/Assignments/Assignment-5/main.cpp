@@ -1,94 +1,91 @@
 //
 //  main.cpp
-//  Queue
+//  CircularQueue
 //
-//  Created by Sunil on 2/23/17.
+//  Created by Sunil on 2/25/17.
 //  Copyright © 2017 Sunil. All rights reserved.
 //
 
 #include <iostream>
+#include <string>
+#include <sstream>
 
-#include "Queue.hpp"
+#include "Queue.h"
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
     
-    Queue<int> queue;
+    std::string dmenu = "======Main Menu======\n"
+                        "1. Enqueue word\n"
+                        "2. Dequeue word\n"
+                        "3. Print queue\n"
+                        "4. Enqueue sentence\n"
+                        "5. Quit";
     
-    cout << "Enqueuing..." << endl;
-    {
-        for(int i = 0; i < 11; i++) {
-            try {
-                cout << i+99 << endl;
-                queue.Enqueue(i+99);
-            } catch (const char* e) {
-                cout << e << endl;
-            }
-        }
-    }
+    int choice;
+    bool exit = false;
+    Queue queue(10);
     
-    cout << "Dequeuing..." << endl;
-    {
-        for(int i = 0; i < 11; i++) {
-            try {
-                cout << queue.Dequeue() << endl;
-            } catch (const char* e) {
-                cout << e << endl;
-            }
-        }
-    }
+    cout << dmenu << endl;
     
-    cout << "Enqueuing..." << endl;
-    {
-        for(int i = 0; i < 11; i++) {
-            try {
-                queue.Enqueue(i+99);
-                cout << i+99 << endl;
-            } catch (const char* e) {
-                cout << e << endl;
-            }
-        }
-    }
-    
-    cout << "Queue of strings" << endl;
-    {
-        Queue<std::string> strs;
-        strs.Enqueue("Hello 1");
-        strs.Enqueue("Hello 2");
-        strs.Enqueue("Hello 3");
-        strs.Enqueue("Hello 4");
-        strs.Enqueue("Hello 5");
-        strs.Enqueue("Hello 6");
-        strs.Enqueue("Hello 7");
-        strs.Enqueue("Hello 8");
-        strs.Enqueue("Hello 9");
-        strs.Enqueue("Hello 10");
+    while(cin >> choice) {
         
-        Queue<string> p((strs));
+        // flush the newlines and other characters
+        cin.clear();
+        cin.ignore();
         
-        while(!strs.isEmpty()) {
-            try {
-                cout << strs.Dequeue() << endl;
-                cout << strs.Dequeue() << endl;
-                strs.Enqueue("Dequeue print");
-
-            } catch (const char* error) {
-                cout << error << endl;
+        switch (choice) {
+            case 1:
+            {
+                std::string word;
+                std::getline(cin, word);
+                queue.enqueue(word);
+                break;
             }
-        }
-        
-        while(!p.isEmpty()) {
-            try {
-                cout << p.Dequeue() << endl;
-                cout << p.Dequeue() << endl;
-                p.Enqueue("Dequeue print");
+            
+            case 2:
+            {
+                queue.dequeue();
+                break;
+            }
                 
-            } catch (const char* error) {
-                cout << error << endl;
+            case 3:
+            {
+                queue.printQueue();
+                break;
+            }
+                
+            case 4:
+            {
+                std::string sentence;
+                std::string word;
+                
+                std::getline(cin, sentence);
+                std::istringstream stream(sentence);
+                
+                cout << "sentence: " << sentence << endl;
+                while(std::getline(stream, word, ' ')) {
+                    queue.enqueue(word);
+                }
+                
+                break;
+            }
+                
+            case 5:
+            {
+                exit = true;
+                break;
             }
         }
+        
+        if (exit) {
+            break;
+        }
+        
+        cout << dmenu << endl;
     }
     
+    cout << "Goodbye" << endl;
     return 0;
 }

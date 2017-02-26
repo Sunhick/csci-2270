@@ -1,93 +1,72 @@
 //
 //  Queue.cpp
-//  Queue
+//  CircularQueue
 //
-//  Created by Sunil on 2/23/17.
+//  Created by Sunil on 2/25/17.
 //  Copyright © 2017 Sunil. All rights reserved.
 //
 
-#ifndef Queue_cpp
-#define Queue_cpp
-
-#include "Queue.hpp"
-
-#include <iostream>
+#include "Queue.h"
 
 using namespace std;
 
-template<typename T>
-Queue<T>::Queue() {
-    reset();
+Queue::Queue(int qs) {
+    queueSize = qs;
+    arrayQueue = new std::string[queueSize];
+    queueHead = 0;
+    queueTail = 0;
 }
 
-template<typename T>
-Queue<T>::~Queue() {
-    reset();
+Queue::~Queue() {
+    delete [] arrayQueue;
+    arrayQueue = nullptr;
 }
 
-template<typename T>
-Queue<T>::Queue(Queue<T>& queue) : Queue() {
-    auto elements = queue.container.get();
+//circular queue methods
+void Queue::enqueue(std::string word) {
+    if (queueIsFull()) {
+        cout << "Queue is full" << endl;
+        return;
+    }
     
-    int index = 0;
-    while(index < queue.filled) {
-        Enqueue(elements[index++]);
+    arrayQueue[queueTail++] = word;
+    queueTail %= queueSize;
+    queueCount++;
+    
+    // log the entry to cout
+    cout << "E: " << word << endl;
+    cout << "H: " << queueHead << endl;
+    cout << "T: " << queueTail << endl;
+}
+
+std::string Queue::dequeue() {
+    if (queueIsEmpty()) {
+        cout << "Queue is empty" << endl;
+        return "";
+    }
+    auto word = arrayQueue[queueHead++];
+    queueHead %= queueSize;
+    queueCount--;
+    
+    // log the entry to cout
+    cout << "E: " << word << endl;
+    cout << "H: " << queueHead << endl;
+    cout << "T: " << queueTail << endl;
+    
+    return word;
+}
+void Queue::printQueue() {
+    auto index = queueHead;
+    while (index != queueTail) {
+        cout << index << ": " << arrayQueue[index] << endl;
+        index = (index+1) % queueSize;
     }
 }
 
-template<typename T>
-Queue<T>::Queue(Queue<T>&& queue) {
-    container = std::move(queue.container);
-    filled = queue.filled;
-    head = queue.head;
-    tail = queue.tail;
-    queue.reset();
+bool Queue::queueIsFull() {
+    return queueCount == queueSize;
 }
 
-template<typename T>
-typename Queue<T>::ElementType Queue<T>::Dequeue() {
-    if(isEmpty()) {
-        throw "Queue is empty";
-    }
-    
-    auto value = container.get()[head];
-    head = (head+1)%capacity;
-    filled--;
-    return value;
+bool Queue::queueIsEmpty() {
+    return queueCount == 0;
 }
-
-template<typename T>
-void Queue<T>::Enqueue(ElementType value) {
-    if (isFull()) {
-        throw "Queue is full";
-    }
-    
-    container.get()[tail] = value;
-    tail = (tail+1)%capacity;
-    filled++;
-}
-
-template<typename T>
-bool Queue<T>::isEmpty() {
-    return filled == 0;
-}
-
-template<typename T>
-bool Queue<T>::isFull() {
-    return filled == capacity;
-}
-
-template<typename T>
-void Queue<T>::reset() {
-    head = 0;
-    tail = 0;
-    filled = 0;
-    
-    container =
-    std::unique_ptr<ElementType, std::function<void(ElementPtr)>>(new ElementType[capacity], [](ElementPtr ptr) {
-        cout << "deleting array of " << typeid(T).name() << endl;
-        delete[] ptr;
-    });
-}
-
-#endif /* Queue_cpp */
