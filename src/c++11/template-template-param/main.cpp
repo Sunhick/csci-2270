@@ -42,5 +42,18 @@ int main(int argc, const char * argv[]) {
         cout << dicts[1] << endl;
     }
     
+    std::cout << "template-template Map 2 examples" << endl;
+    {
+        Map<string, string, Container> dicts;
+        
+        dicts["map.key.1"] = "map.value.1";
+        dicts["map.key.2"] = "map.value.14";
+        dicts["map.key.3"] = "map.value.3";
+        
+        cout << dicts["map.key.1"] << endl;
+        cout << dicts["map.key.2"] << endl;
+        cout << dicts["map.key.3"] << endl;
+    }
+    
     return 0;
 }

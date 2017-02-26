@@ -30,6 +30,9 @@ class Map {
 private:
     Array<KeyType> keys;
     Array<ValueType> values;
+    const int size = 10;
+    int count = 0;
+    
 public:
     Map();
     ~Map();
