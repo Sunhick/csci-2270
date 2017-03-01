@@ -29,6 +29,8 @@ bool& selfCall() {
 void* operator new(size_t block, const char *filename, const char *func, int line) {
     auto tracker = Memcheck::Instance();
     if(selfCall() || tracker == nullptr) {
+        // No need to call constructor. Since we are only overloading the allocation part of new.
+        // http://stackoverflow.com/questions/31106449/why-overloaded-new-operator-is-calling-constructor-even-i-am-using-malloc-inside
         return malloc(block);
     } else {
         auto address = malloc(block);
