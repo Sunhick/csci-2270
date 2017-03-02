@@ -31,7 +31,7 @@ class BinaryTree(object):
                 node.Parent = parent
                 return
             else:
-                self.__addNode(node, parent->Right)
+                self.__addNode(node, parent.Right)
         if node.Value < parent.Value:
             # node goes to the left
             if parent.Left is None:
@@ -39,4 +39,4 @@ class BinaryTree(object):
                 node.Parent = parent
                 return
             else:
-                self.__addNode(node, parent->Left)
+                self.__addNode(node, parent.Left)
