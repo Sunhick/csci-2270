@@ -25,8 +25,7 @@ Queue::~Queue() {
 //circular queue methods
 void Queue::enqueue(std::string word) {
     if (queueIsFull()) {
-        cout << "Queue is full" << endl;
-        return;
+        throw std::runtime_error("Queue is full");
     }
     
     arrayQueue[queueTail++] = word;
@@ -34,32 +33,39 @@ void Queue::enqueue(std::string word) {
     queueCount++;
     
     // log the entry to cout
-    cout << "E: " << word << endl;
+    cout << "word: E: " << word << endl;
     cout << "H: " << queueHead << endl;
     cout << "T: " << queueTail << endl;
 }
 
 std::string Queue::dequeue() {
     if (queueIsEmpty()) {
-        cout << "Queue is empty" << endl;
-        return "";
+        throw std::runtime_error("Queue is empty");
     }
+    
     auto word = arrayQueue[queueHead++];
     queueHead %= queueSize;
     queueCount--;
     
     // log the entry to cout
-    cout << "E: " << word << endl;
     cout << "H: " << queueHead << endl;
     cout << "T: " << queueTail << endl;
+    cout << "word: " << word << endl;
     
     return word;
 }
 void Queue::printQueue() {
+    if (queueIsEmpty()) {
+        cout << "Empty" << endl;
+        return;
+    }
+    
     auto index = queueHead;
-    while (index != queueTail) {
+    auto printCount = queueCount;
+    while (printCount) {
         cout << index << ": " << arrayQueue[index] << endl;
         index = (index+1) % queueSize;
+        printCount--;
     }
 }
 
