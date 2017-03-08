@@ -39,9 +39,13 @@ class Node(object):
         return self.__value
 
     @Value.setter
-    def Value(self, left):
+    def Value(self, value):
         self.__value = value
 
     @property
     def Parent(self):
         return self.__parent
+
+    @Parent.setter
+    def Parent(self, parent):
+        self.__parent = parent
