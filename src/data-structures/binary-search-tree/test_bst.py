@@ -127,10 +127,10 @@ class Test_BST(unittest.TestCase):
             self.assertIsNone(find, "Node {} is not deleted. Still hanging in BST".format(value))
             self.redirectPrint()
             inorder = self.bst.InorderTraversal()
+            # filter out empty strings
             output = filter(None, self.restorePrint().strip().split('\n'))
-            if output:
-                got = list(map(int, output))
-                self.assertEqual(got, self.expected_inorder, 'Deletion of node {0} is incorrect!'.format(value))
+            got = list(map(int, output))
+            self.assertEqual(got, self.expected_inorder, 'Deletion of node {0} is incorrect!'.format(value))
 
 if __name__ == "__main__":
     unittest.main()
