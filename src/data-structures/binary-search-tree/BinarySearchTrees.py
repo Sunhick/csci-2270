@@ -38,14 +38,14 @@ class BinarySearchTree(object):
     def __addNode(self, node, root):
         if node.Value > root.Value:
             # Node has to be added to right
-            if root.Right is None:
+            if not root.Right:
                 root.Right = node
                 node.Parent = root
             else:
                 self.__addNode(node, root.Right)
         if node.Value < root.Value:
             # node goes to the left
-            if root.Left is None:
+            if not root.Left:
                 root.Left = node
                 node.Parent = root
             else:
@@ -113,7 +113,11 @@ class BinarySearchTree(object):
         # It would be easier to copy value from minNode to node, 
         # instead of swapping the minNode with node and update a bunch of links.
         node.Value = minNode.Value
-        
+
+        # Set the minNode right's parent 
+        if minNode.Right:
+            minNode.Right.Parent = minNode.Parent
+
         # Is the minNode directly attached to right side of the node.
         if node.Right == minNode:
             node.Right = minNode.Right

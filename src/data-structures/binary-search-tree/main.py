@@ -13,18 +13,30 @@ from BinarySearchTrees import BinarySearchTree
 
 def main():
     bst = BinarySearchTree()
-    values = [20, 9, 23, 8, 11, 55, 24, 27, 10, 12, 13, 21, 22, 56, 66, 57]
-    for value in values:
-        bt.AddValue(value)
+    # values = [20, 9, 23, 8, 11, 55, 24, 27, 10, 12, 13, 21, 22, 56, 66, 57]
+    # for value in values:
+    #     bt.AddValue(value)
 
-    bt.InorderTraversal()
-    print("===============")
+    # bt.InorderTraversal()
+    # print("===============")
 
-    deletes = [8, 13, 24, 23, 20]
-    for d in deletes:
-        bst.DeleteValue(d)
+    # deletes = [8, 13, 24, 23, 20]
+    # for d in deletes:
+    #     bst.DeleteValue(d)
+    #     bst.InorderTraversal()
+    #     print("----------")
+
+    del bst
+    bst = BinarySearchTree()
+    values = [5, 2, 18, -4, 3, 21, 19, 25]
+    for e in values:
+        bst.AddValue(e)
+
+    for e in values:
+        print("deleting", e)
+        bst.DeleteValue(e)
         bst.InorderTraversal()
-        print("----------")
+        print("-------------")
 
 if __name__ == '__main__':
     main()

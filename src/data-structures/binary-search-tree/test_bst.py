@@ -121,14 +121,16 @@ class Test_BST(unittest.TestCase):
 
     def test_delete_allNodes_oneByOne(self):
         for value in self.values:
-            print("deleting node = ", value)
             self.expected_inorder.remove(value)
             self.bst.DeleteValue(value)
+            find = self.bst.SearchValue(value, self.bst.Root)
+            self.assertIsNone(find, "Node {} is not deleted. Still hanging in BST".format(value))
             self.redirectPrint()
             inorder = self.bst.InorderTraversal()
-            got = list(map(int, self.restorePrint().strip().split('\n')))
-            print("got = ",got)
-            self.assertEqual(got, self.expected_inorder, 'Deletion of node {0} is incorrect!'.format(value))
+            output = filter(None, self.restorePrint().strip().split('\n'))
+            if output:
+                got = list(map(int, output))
+                self.assertEqual(got, self.expected_inorder, 'Deletion of node {0} is incorrect!'.format(value))
 
 if __name__ == "__main__":
     unittest.main()
