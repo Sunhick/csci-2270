@@ -58,33 +58,48 @@ class BinaryTree(object):
         self.__deleteNode(node)
 
     def __deleteNode(self, node):
-        nodeLeftOfParent = True if node.Parent.Left == node else False
         # case 1: node has no children.
         if not node.Left and not node.Right:
-            # check where the node is present relative to it's parent.
-            if nodeLeftOfParent:
-                node.Parent.Left = None
+            # check if parent is availble. 
+            if node.Parent:
+                # check where the node is present relative to it's parent.
+                if node.Parent.Left == node:
+                    node.Parent.Left = None
+                else:
+                    node.Parent.Right = None
             else:
-                node.Parent.Right = None
+                # If not, then it's a root. If it's root with no left/ right
+                # child, then delete it.
+                self.__root = None
             del node
             return
 
         # case 2: node has only 1 child
         if node.Left and not node.Right:
             node.Left.Parent = node.Parent
-            if nodeLeftOfParent:
-                node.Parent.Left = node.Left
+            # see if there's a parent.
+            if node.Parent:
+                if node.Parent.Left == node:
+                    node.Parent.Left = node.Left
+                else:
+                    node.Parent.Right = node.Left
             else:
-                node.Parent.Right = node.Left
+                # root with only left child.
+                self.__root = node.Left
             del node
             return
 
         if node.Right and not node.Left:
             node.Right.Parent = node.Parent
-            if nodeLeftOfParent:
-                node.Parent.Left = node.Right
-            else :
-                node.Parent.Right = node.Right
+            # check if parent is available.
+            if node.Parent:
+                if node.Parent.Left == node:
+                    node.Parent.Left = node.Right
+                else :
+                    node.Parent.Right = node.Right
+            else:
+                # Root node with only right child
+                self.__root = node.Right
             del node
             return
 
