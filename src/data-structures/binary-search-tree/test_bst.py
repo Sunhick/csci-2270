@@ -38,11 +38,6 @@ class Test_BST(unittest.TestCase):
         for value in self.values:
             self.bst.AddValue(value)
 
-    def test_creation(self):
-        self.assertIsNotNone(self.bst.Root, "Root is null")
-        self.assertEqual(self.bst.Root.Value, self.values[0],
-                         'Root value should be {0}'.format(self.values[0]))
-
     def redirectPrint(self):
         # redirect the print lines to a string buffer
         sys.stdout = TextIOWrapper(BytesIO(), sys.stdout.encoding)
@@ -56,7 +51,12 @@ class Test_BST(unittest.TestCase):
         # restore print to console output
         sys.stdout = sys.__stdout__
         return out
-    
+
+    def test_creation(self):
+        self.assertIsNotNone(self.bst.Root, "Root is null")
+        self.assertEqual(self.bst.Root.Value, self.values[0],
+                         'Root value should be {0}'.format(self.values[0]))
+
     def test_inorder(self):
         self.redirectPrint()
         inorder = self.bst.InorderTraversal()
@@ -118,6 +118,17 @@ class Test_BST(unittest.TestCase):
         inorder = self.bst.InorderTraversal()
         got = list(map(int, self.restorePrint().strip().split('\n')))
         self.assertEqual(got, self.expected_inorder, 'Deletion of root node {0} is incorrect!'.format(value))
+
+    def test_delete_allNodes_oneByOne(self):
+        for value in self.values:
+            print("deleting node = ", value)
+            self.expected_inorder.remove(value)
+            self.bst.DeleteValue(value)
+            self.redirectPrint()
+            inorder = self.bst.InorderTraversal()
+            got = list(map(int, self.restorePrint().strip().split('\n')))
+            print("got = ",got)
+            self.assertEqual(got, self.expected_inorder, 'Deletion of node {0} is incorrect!'.format(value))
 
 if __name__ == "__main__":
     unittest.main()
