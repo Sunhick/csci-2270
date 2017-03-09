@@ -6,6 +6,7 @@ unit testing of binary search trees
 """
 import sys
 import unittest
+import random
 
 from io import TextIOWrapper, BytesIO
 from BinarySearchTrees import BinarySearchTree
@@ -120,6 +121,20 @@ class Test_BST(unittest.TestCase):
         self.assertEqual(got, self.expected_inorder, 'Deletion of root node {0} is incorrect!'.format(value))
 
     def test_delete_allNodes_oneByOne(self):
+        for value in self.values:
+            self.expected_inorder.remove(value)
+            self.bst.DeleteValue(value)
+            find = self.bst.SearchValue(value, self.bst.Root)
+            self.assertIsNone(find, "Node {} is not deleted. Still hanging in BST".format(value))
+            self.redirectPrint()
+            inorder = self.bst.InorderTraversal()
+            # filter out empty strings
+            output = filter(None, self.restorePrint().strip().split('\n'))
+            got = list(map(int, output))
+            self.assertEqual(got, self.expected_inorder, 'Deletion of node {0} is incorrect!'.format(value))
+
+    def test_delete_allNodes_oneByOne_random(self):
+        random.shuffle(self.values)
         for value in self.values:
             self.expected_inorder.remove(value)
             self.bst.DeleteValue(value)
