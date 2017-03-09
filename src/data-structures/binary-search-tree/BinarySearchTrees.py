@@ -3,14 +3,14 @@
 """
 Node definition
 
-Pythonic implementation of binary trees
+Pythonic implementation of binary search trees
 """
 
 from Node import Node
 
-class BinaryTree(object):
+class BinarySearchTree(object):
     """
-    Binary tree class
+    Binary search tree class
     """
     # entry point to the tree.
     __root = None
