@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 
 """
-Example of using binary tree
+Example of using binary search tree
 
 main file
 """
+
+__author__ = "Sunil"
+__email__ = "suba5417@colorado.edu"
 
 from BinarySearchTrees import BinarySearchTree
 

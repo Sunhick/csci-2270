@@ -6,6 +6,9 @@ Node definition
 Pythonic implementation of binary trees
 """
 
+__author__ = "Sunil"
+__email__ = "suba5417@colorado.edu"
+
 class Node(object):
     __left = None
     __right = None

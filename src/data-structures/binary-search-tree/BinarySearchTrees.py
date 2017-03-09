@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 
 """
-Node definition
+Binary serach tree
 
 Pythonic implementation of binary search trees
 """
+
+__author__ = "Sunil"
+__email__ = "suba5417@colorado.edu"
 
 from Node import Node
 
