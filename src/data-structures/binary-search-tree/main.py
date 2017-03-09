@@ -9,7 +9,7 @@ main file
 __author__ = "Sunil"
 __email__ = "suba5417@colorado.edu"
 
-from BinarySearchTrees import BinarySearchTree
+from BinarySearchTree import BinarySearchTree
 
 def main():
     bst = BinarySearchTree()

@@ -9,7 +9,7 @@ import unittest
 import random
 
 from io import TextIOWrapper, BytesIO
-from BinarySearchTrees import BinarySearchTree
+from BinarySearchTree import BinarySearchTree
 
 class Test_BST(unittest.TestCase):
     """
