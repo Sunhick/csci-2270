@@ -33,7 +33,25 @@ class BinarySearchTree(object):
         if not self.__root:
             self.__root = node
             return
-        self.__addNode(node, self.__root)
+
+        parent = None
+        temp = self.__root
+        while temp:
+            parent = temp
+            if node.Value > temp.Value:
+                temp = temp.Right
+            else:
+                temp = temp.Left
+
+        # parent shouldn't be None at this point.
+        node.Parent = parent
+        if node.Value > parent.Value:
+            parent.Right = node
+        else:
+            parent.Left = node
+
+        # If using recursion to add.
+        # self.__addNode(node, self.__root)
 
     def __addNode(self, node, root):
         if node.Value > root.Value:
