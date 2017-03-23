@@ -27,6 +27,11 @@ rbtree::~rbtree() {
     
 }
 
+bool rbtree::violates(bool contraint) {
+    // just negate the contraint and return
+    return !contraint;
+}
+
 void rbtree::insert(int key) {
     
 }
@@ -190,13 +195,13 @@ bool rbtree::is_valid_rbtree() {
     }
     
     // P.1: check if all nodes are red/ black.
-    if (!has_only_red_black_nodes(root)) {
+    if (violates(has_only_red_black_nodes(root))) {
         // some nodes are of different color. It's not a red black tree
         return false;
     }
     
     // P.2: If root is not black then it's invalid.
-    if (root->color != rbcolor::black)
+    if (violates(root->is_black_node()))
         return false;
     
     // P.3: I take all null nodes to be black.
@@ -204,14 +209,14 @@ bool rbtree::is_valid_rbtree() {
     // check for black null nodes.
     
     // P.4: all red nodes should have black children.
-    if (!rednode_has_black_children(root)) {
+    if (violates(rednode_has_black_children(root))) {
         // some/all of red nodes doesn't have a black children
         return false;
     }
     
     // P.5:  check #black nodes along all possible path from root
     //  to leaf nodes.
-    if (!has_equal_black_nodes_all_path(root)) {
+    if (violates(has_equal_black_nodes_all_path(root))) {
         // unequal number of black nodes.
         return false;
     }
