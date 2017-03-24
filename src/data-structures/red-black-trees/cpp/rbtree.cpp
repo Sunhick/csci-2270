@@ -8,9 +8,10 @@
 
 #include "rbtree.hpp"
 
+#include <list>
 #include <tuple>
 #include <stack>
-#include <list>
+#include <queue>
 #include <iostream>
 
 using namespace std;
@@ -163,19 +164,19 @@ bool rbtree::has_equal_black_nodes_all_path(rbnode* parent) {
         auto node = std::get<0>(pair);
         auto count = std::get<1>(pair);
         
-        if (node->left) {
-            auto left = node->left;
-            stk.push(make_tuple(left, count + count_if_black(left)));
-        } else {
-            // left child is null. count it as a black node.
-            paths.push_front(count + 1);
-        }
-        
         if (node->right) {
             auto right = node->right;
             stk.push(make_tuple(right, count + count_if_black(right)));
         } else {
             // right child is null. count it as a black node.
+            paths.push_front(count + 1);
+        }
+        
+        if (node->left) {
+            auto left = node->left;
+            stk.push(make_tuple(left, count + count_if_black(left)));
+        } else {
+            // left child is null. count it as a black node.
             paths.push_front(count + 1);
         }
     }
@@ -250,9 +251,60 @@ void rbtree::prune(int min, int max) {
 }
 
 void rbtree::bfs() {
-    throw new runtime_error("not implemented");
+    // breadth first search traversal.
+    if (!root) {
+        cout << "rb tree is empty" << endl;
+        return;
+    }
+    
+    cout << "----- BFS ------" << endl;
+    
+    deque<rbnode*> queue;
+    queue.push_back(root);
+    
+    while(!queue.empty()) {
+        auto node = queue.front();
+        queue.pop_front();
+        
+        cout << node->key << endl;
+        
+        if (node->left) {
+            queue.push_back(node->left);
+        }
+        
+        if (node->right) {
+            queue.push_back(node->right);
+        }
+    }
+    
 }
 
 void rbtree::dfs() {
-    throw new runtime_error("not implemented");
+    // depth first search traversal.
+    if (!root) {
+        cout << "rb tree is empty!" << endl;
+        return;
+    }
+    
+    cout << "----- DFS ------" << endl;
+    
+    stack<rbnode*> stk;
+    stk.push(root);
+    
+    while (!stk.empty()) {
+        auto node = stk.top();
+        stk.pop();
+        
+        cout << node->key << endl;
+        
+        if (node->right) {
+            auto right = node->right;
+            stk.push(right);
+        }
+        
+        if (node->left) {
+            auto left = node->left;
+            stk.push(left);
+        }
+    }
 }
