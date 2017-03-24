@@ -56,6 +56,9 @@ int main(int argc, const char * argv[]) {
     cout << std::boolalpha << rbt.has_equal_black_nodes_all_path(rbt.root) << endl;
     cout << std::boolalpha << rbt.is_valid_rbtree() << endl;
     cout << std::boolalpha << rbt2.is_valid_rbtree() << endl;
+    
+    rbt2.dfs();
+    rbt2.bfs();
 
     return 0;
 }

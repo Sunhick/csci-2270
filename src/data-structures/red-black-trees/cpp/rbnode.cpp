@@ -22,7 +22,7 @@ rbnode::rbnode(int key, rbcolor color,rbnode *parent, rbnode *left, rbnode *righ
 }
 
 rbnode::~rbnode() {
-    cout << "rbnode dtor called" << endl;
+    // nothing to do here.
 }
 
 bool rbnode::is_red_node() {

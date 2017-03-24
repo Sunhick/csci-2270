@@ -9,6 +9,7 @@
 #ifndef rbnode_hpp
 #define rbnode_hpp
 
+
 enum rbcolor {
     red,
     black

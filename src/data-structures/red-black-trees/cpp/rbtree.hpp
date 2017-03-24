@@ -19,11 +19,11 @@ class rbtree {
 private:
     rbnode *root;
     
-    rbnode* search(rbnode node, int key);
     bool has_only_red_black_nodes(rbnode* node);
     bool rednode_has_black_children(rbnode* node);
     bool has_equal_black_nodes_all_path(rbnode* parent);
     bool violates(bool);
+
 public:
     rbtree();
     ~rbtree();

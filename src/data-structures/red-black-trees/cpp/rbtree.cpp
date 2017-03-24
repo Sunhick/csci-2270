@@ -16,12 +16,8 @@
 
 using namespace std;
 
-rbnode* rbtree::search(rbnode node, int key) {
-    return nullptr;
-}
-
 rbtree::rbtree() {
-    
+    root = nullptr;
 }
 
 rbtree::~rbtree() {
@@ -52,7 +48,11 @@ bool rbtree::violates(bool constraint) {
 }
 
 void rbtree::insert(int key) {
-    
+    if (!root) {
+        // empty tree. first node to add.
+        // create a black node and add it to the rbtree.
+        root = new rbnode(key, rbcolor::black);
+    }
 }
 
 bool rbtree::has_only_red_black_nodes(rbnode* node) {
@@ -243,6 +243,20 @@ bool rbtree::is_valid_rbtree() {
 }
 
 rbnode* rbtree::search(int key) {
+    if (!root) {
+        // no nodes.
+        return nullptr;
+    }
+    auto node = root;
+    while(node) {
+        if (node->key == key)
+            return node;
+        else if (key < node->key)
+            node = node->left;
+        else
+            node = node->right;
+    }
+    
     return nullptr;
 }
 
@@ -256,8 +270,6 @@ void rbtree::bfs() {
         cout << "rb tree is empty" << endl;
         return;
     }
-    
-    cout << "----- BFS ------" << endl;
     
     deque<rbnode*> queue;
     queue.push_back(root);
@@ -285,8 +297,6 @@ void rbtree::dfs() {
         cout << "rb tree is empty!" << endl;
         return;
     }
-    
-    cout << "----- DFS ------" << endl;
     
     stack<rbnode*> stk;
     stk.push(root);
