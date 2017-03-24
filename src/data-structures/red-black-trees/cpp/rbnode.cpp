@@ -12,7 +12,7 @@
 
 using namespace std;
 
-rbnode::rbnode(int key, rbcolor color, rbnode *left, rbnode *right, rbnode *parent) {
+rbnode::rbnode(int key, rbcolor color,rbnode *parent, rbnode *left, rbnode *right) {
     // rb node constructor
     this->key = key;
     this->left = left;

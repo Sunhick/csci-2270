@@ -24,19 +24,33 @@ rbtree::rbtree() {
 }
 
 rbtree::~rbtree() {
-    
+    remove_all(root);
 }
 
-bool rbtree::violates(bool contraint) {
-    // just negate the contraint and return
-    return !contraint;
-}
-
-void rbtree::insert(int key) {
+void rbtree::remove_all(rbnode* node) {
+    if (!node) {
+        // no node to delete
+        return;
+    }
     
+    if (node->left)
+        remove_all(node->left);
+    if (node->right)
+        remove_all(node->right);
+    
+    delete node;
 }
 
 void rbtree::remove(int key) {
+    // TODO: after removing the node, rebalance the tree.
+}
+
+bool rbtree::violates(bool constraint) {
+    // just negate the constraint and return
+    return !constraint;
+}
+
+void rbtree::insert(int key) {
     
 }
 
@@ -136,8 +150,11 @@ bool rbtree::has_equal_black_nodes_all_path(rbnode* parent) {
     stack<tuple<rbnode*, int>> stk;
     list<int> paths;
     
-    // count black nodes initially as 1 because root is black.
-    stk.push(make_tuple(parent, 1));
+    auto count_if_black = [](rbnode* node) {
+        return (node->is_black_node() ? 1 : 0);
+    };
+    
+    stk.push(make_tuple(parent, count_if_black(parent)));
     
     while (!stk.empty()) {
         auto pair = stk.top();
@@ -148,7 +165,7 @@ bool rbtree::has_equal_black_nodes_all_path(rbnode* parent) {
         
         if (node->left) {
             auto left = node->left;
-            stk.push(make_tuple(left, count + (left->is_black_node() ? 1 : 0)));
+            stk.push(make_tuple(left, count + count_if_black(left)));
         } else {
             // left child is null. count it as a black node.
             paths.push_front(count + 1);
@@ -156,7 +173,7 @@ bool rbtree::has_equal_black_nodes_all_path(rbnode* parent) {
         
         if (node->right) {
             auto right = node->right;
-            stk.push(make_tuple(right, count + (right->is_black_node() ? 1 : 0)));
+            stk.push(make_tuple(right, count + count_if_black(right)));
         } else {
             // right child is null. count it as a black node.
             paths.push_front(count + 1);

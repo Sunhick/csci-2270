@@ -23,15 +23,18 @@ private:
     bool has_only_red_black_nodes(rbnode* node);
     bool rednode_has_black_children(rbnode* node);
     bool has_equal_black_nodes_all_path(rbnode* parent);
+    bool violates(bool);
 public:
     rbtree();
     ~rbtree();
     
     void insert(int key);
-    void remove(int key);
     rbnode* search(int key);
     bool is_valid_rbtree();
     void prune(int min, int max);
+    
+    void remove(int key);
+    void remove_all(rbnode* root);
     
     void bfs();
     void dfs();

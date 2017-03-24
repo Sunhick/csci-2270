@@ -23,8 +23,8 @@ public:
     rbcolor color;
     
     // ctor and dtor
-    rbnode(int key, rbcolor color = rbcolor::red, rbnode *left = nullptr,   \
-           rbnode *right = nullptr, rbnode *parent = nullptr);
+    rbnode(int key, rbcolor color = rbcolor::red, rbnode *parent = nullptr, \
+           rbnode *left = nullptr, rbnode *right = nullptr);
     ~rbnode();
     
     bool is_red_node();
