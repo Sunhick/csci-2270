@@ -355,7 +355,6 @@ void rbtree::right_rotate(rbnode* y) {
      */
     
     auto x = y->left;
-    auto c = y->right;
     
     // get right subtree of x if available.
     // otherwise set it to nullptr.
@@ -383,7 +382,7 @@ void rbtree::right_rotate(rbnode* y) {
         y->parent->right = x;
     }
     
-    y->left = b;
+    x->right = y;
     y->parent = x;
 }
 
@@ -397,7 +396,6 @@ void rbtree::left_rotate(rbnode* x) {
      */
     
     auto y = x->right;
-    auto a = x->left;
     
     // get left subtree of y if available.
     // otherwise set it to nullptr.
@@ -426,7 +424,7 @@ void rbtree::left_rotate(rbnode* x) {
         x->parent->right = y;
     }
     
-    x->left = a;
+    y->left = x;
     x->parent = y;
 }
 
