@@ -23,7 +23,8 @@ private:
     bool rednode_has_black_children(rbnode* node);
     bool has_equal_black_nodes_all_path(rbnode* parent);
     bool violates(bool);
-
+    int depth(rbnode* node);
+    
 public:
     rbtree();
     ~rbtree();
@@ -36,6 +37,8 @@ public:
     void balance(rbnode* node);
     void left_rotate(rbnode* node);
     void right_rotate(rbnode* node);
+    
+    int depth();
     
     void remove(int key);
     void remove_all(rbnode* root);

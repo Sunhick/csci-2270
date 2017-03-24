@@ -341,7 +341,80 @@ void rbtree::prune(int min, int max) {
 }
 
 void rbtree::balance(rbnode* node) {
-    throw new runtime_error("not implemented");
+    while (true) {
+        // loop invarient: node is red.
+        // we don't want two consecutive nodes (node and it's parent) to be red.
+        
+        // if node's parent is black. then we're done.
+        if (node->parent && node->parent->is_black_node()) {
+            break;
+        }
+        /*
+         notation used in rb tree representation in comments.
+            g  = black grand parent
+            p  = black parent
+            u  = black uncle
+            
+            X  = newly inserted red node
+            G  = red grand parent
+            P  = red parent
+            U  = red uncle
+         */
+        
+        /* case 1: uncle is red.
+            fix: recolor parent, grand-parent and uncle.
+         
+                      ...                                        ...
+                      /                                          /
+                     g             recolor (g, p, u)            G
+                   /   \          ------------------->        /   \
+                  P     U                                    p     u
+                 / \   / \                                  / \   / \
+                X                                          X
+         */
+        
+        /* case 2: uncle is black (node is internal. falls within uncle and parent subtree).
+            fix: rotate around parent. This rotation leads to case 3.
+         
+                    ...                                             ...
+                    /                                               /
+                   g                                               g
+                 /   \           left rotate around p            /   \
+                P     u        ----------------------->         X     u
+               / \   / \                                       / \   / \
+                  X                                           P
+         
+                ...                                            ...
+                  \                                              \
+                  g                                               g
+                /   \          right rotate around p            /   \
+               u     P        ----------------------->         u     X
+              / \   / \                                       / \   / \
+                   X                                                   P
+         */
+        
+        /* case 3: uncle is black (node is external. falls outside of uncle and parent's subtree)
+            fix: rotate around grand-parent and swap colors of grand-parent & parent.
+         
+                    ...                                             ...
+                    /                                               /
+                   g                                               p
+                 /   \          right rotate around g            /   \
+                P     u       -------------------------->       X     G
+               / \   / \        swap color of (p, g)                 / \
+              X   a                                                 a   u
+                                                                       / \
+         
+              ...                                            ...
+                \                                              \
+                 g                                              p
+               /   \          left rotate around g            /   \
+              u     P       -------------------------->      G     X
+             / \   / \        swap color of (p, g)          / \
+                  a   X                                    u   a
+                                                          / \
+         */
+    }
 }
 
 void rbtree::right_rotate(rbnode* y) {
@@ -426,6 +499,22 @@ void rbtree::left_rotate(rbnode* x) {
     
     y->left = x;
     x->parent = y;
+}
+
+int rbtree::depth(rbnode* node) {
+    if (!node) {
+        // no node. depth is zero.
+        return 0;
+    }
+    
+    auto left_depth = depth(node->left);
+    auto right_depth = depth(node->right);
+    
+    return 1 + max(left_depth, right_depth);
+}
+
+int rbtree::depth() {
+    return depth(root);
 }
 
 void rbtree::remove(int key) {
