@@ -33,6 +33,10 @@ public:
     bool is_valid_rbtree();
     void prune(int min, int max);
     
+    void balance(rbnode* node);
+    void left_rotate(rbnode* node);
+    void right_rotate(rbnode* node);
+    
     void remove(int key);
     void remove_all(rbnode* root);
     

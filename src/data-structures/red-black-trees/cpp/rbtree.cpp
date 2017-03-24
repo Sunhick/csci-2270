@@ -38,21 +38,42 @@ void rbtree::remove_all(rbnode* node) {
     delete node;
 }
 
-void rbtree::remove(int key) {
-    // TODO: after removing the node, rebalance the tree.
-}
-
 bool rbtree::violates(bool constraint) {
     // just negate the constraint and return
     return !constraint;
 }
 
 void rbtree::insert(int key) {
+    auto node = new rbnode(key, rbcolor::black);
     if (!root) {
         // empty tree. first node to add.
         // create a black node and add it to the rbtree.
-        root = new rbnode(key, rbcolor::black);
+        root = node;
+        return;
     }
+    
+    auto temp = root;
+    rbnode* parent = nullptr;
+    
+    // add node as you would in a BST.
+    while(temp) {
+        parent = temp;
+        if (key > temp->key)
+            temp = temp->right;
+        else
+            temp = temp->left;
+    }
+    
+    // parent shouldn't be nullptr at this point.
+    node->parent = parent;
+    if (key > parent->key)
+        parent->right = node;
+    else
+        parent->left = node;
+    
+    // adding node would have disturbed the rb tree.
+    // Retore the it's properties by rebalancing it.
+    balance(node);
 }
 
 bool rbtree::has_only_red_black_nodes(rbnode* node) {
@@ -260,10 +281,6 @@ rbnode* rbtree::search(int key) {
     return nullptr;
 }
 
-void rbtree::prune(int min, int max) {
-    throw new runtime_error("not implemented");
-}
-
 void rbtree::bfs() {
     // breadth first search traversal.
     if (!root) {
@@ -317,4 +334,103 @@ void rbtree::dfs() {
             stk.push(left);
         }
     }
+}
+
+void rbtree::prune(int min, int max) {
+    throw new runtime_error("not implemented");
+}
+
+void rbtree::balance(rbnode* node) {
+    throw new runtime_error("not implemented");
+}
+
+void rbtree::right_rotate(rbnode* y) {
+    /*
+             y                                        x
+            / \        right rotate around y         / \
+           x   c     ----------------------->       a   y
+          / \                                          / \
+         a   b                                        b   c
+     
+     */
+    
+    auto x = y->left;
+    auto c = y->right;
+    
+    // get right subtree of x if available.
+    // otherwise set it to nullptr.
+    auto b = x ? x->right : nullptr;
+    
+    // turn x's right subtree into a y's left subtree.
+    y->left = b;
+    
+    if (b) {
+        b->parent = y;
+    }
+    
+    // set parent of x to y's parent.
+    x->parent = y->parent;
+    
+    // if y doesn't have a parent, make x as root.
+    if (!y->parent) {
+        root = x;
+    }
+    // parent is not null, see if y is to left/right of parent.
+    else if (y->parent->left == y) {
+        y->parent->left = x;
+    }
+    else {
+        y->parent->right = x;
+    }
+    
+    y->left = b;
+    y->parent = x;
+}
+
+void rbtree::left_rotate(rbnode* x) {
+    /*
+            x                                          y
+           / \          left rotate around x          / \
+          a   y       ------------------------>      x   c
+             / \                                    / \
+            b   c                                  a   b
+     */
+    
+    auto y = x->right;
+    auto a = x->left;
+    
+    // get left subtree of y if available.
+    // otherwise set it to nullptr.
+    auto b = y ? y->left : nullptr;
+    
+    // no need to get c, as it stays unaffected by left rotation.
+    
+    // turn y's left subtree into a x's right subtree.
+    x->right = b;
+    if (b) {
+        b->parent = x;
+    }
+    
+    // set parent of y to x's parent.
+    y->parent = x->parent;
+    
+    // if x doesn't have a parent, make y as root.
+    if (!x->parent) {
+        root = y;
+    }
+    // parent is not null, see if x is to left/right of parent.
+    else if (x->parent->left == x) {
+        x->parent->left = y;
+    }
+    else {
+        x->parent->right = y;
+    }
+    
+    x->left = a;
+    x->parent = y;
+}
+
+void rbtree::remove(int key) {
+    // TODO: after removing the node, rebalance the tree.
+    throw new runtime_error("not implemented");
 }
