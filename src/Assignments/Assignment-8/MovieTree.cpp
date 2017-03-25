@@ -42,7 +42,6 @@ void MovieTree::deleteMovieNode(std::string title) {
     
     // case 1: node has no children.
     if (!node->leftChild && !node->rightChild) {
-        cout << "case 1" << endl;
         // check if parent is availble.
         if (node->parent) {
             // check where the node is present relative to it's parent.
@@ -63,7 +62,6 @@ void MovieTree::deleteMovieNode(std::string title) {
     
     // case 2: node has only 1 child
     if (node->leftChild && !node->rightChild) {
-        cout << "case 2 Left" << endl;
         node->leftChild->parent = node->parent;
         //see if there's a parent.
         if (node->parent) {
@@ -82,7 +80,6 @@ void MovieTree::deleteMovieNode(std::string title) {
     }
     
     if (!node->leftChild && node->rightChild) {
-        cout << "case 2 Right" << endl;
         node->rightChild->parent = node->parent;
         //see if there's a parent.
         if (node->parent) {
@@ -103,10 +100,6 @@ void MovieTree::deleteMovieNode(std::string title) {
     // case 3: node has both left and right child
     // pick the min value from the right subtree
     auto minNode = treeMinimum(node->rightChild);
-    cout << "MinNode <<<<< " << endl;
-    if (minNode) {
-        cout << "Replacement: " << minNode->title << endl;
-    }
     
     // It would be easier to copy value from minNode to node and delete minNode.
     // Rather than swapping the minNode with node and update a bunch of links!
