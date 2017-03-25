@@ -25,6 +25,8 @@ private:
     bool violates(bool);
     int depth(rbnode* node);
     
+    void inorder_traversal(rbnode* node);
+    
 public:
     rbtree();
     ~rbtree();
@@ -45,6 +47,7 @@ public:
     
     void bfs();
     void dfs();
+    void inorder();
 };
 
 #endif /* rbtree_hpp */
