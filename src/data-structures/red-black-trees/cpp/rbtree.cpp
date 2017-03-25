@@ -44,10 +44,11 @@ bool rbtree::violates(bool constraint) {
 }
 
 void rbtree::insert(int key) {
-    auto node = new rbnode(key, rbcolor::black);
+    auto node = new rbnode(key, rbcolor::red);
     if (!root) {
         // empty tree. first node to add.
         // create a black node and add it to the rbtree.
+        node->color = rbcolor::black;
         root = node;
         return;
     }
@@ -295,7 +296,8 @@ void rbtree::bfs() {
         auto node = queue.front();
         queue.pop_front();
         
-        cout << node->key << endl;
+        string color = node->is_black_node() ? "(black)" : "(red)";
+        cout << node->key << color << endl;
         
         if (node->left) {
             queue.push_back(node->left);
@@ -322,7 +324,8 @@ void rbtree::dfs() {
         auto node = stk.top();
         stk.pop();
         
-        cout << node->key << endl;
+        string color = node->is_black_node() ? "(black)" : "(red)";
+        cout << node->key << color << endl;
         
         if (node->right) {
             auto right = node->right;
@@ -340,26 +343,28 @@ void rbtree::prune(int min, int max) {
     throw new runtime_error("not implemented");
 }
 
-void rbtree::balance(rbnode* node) {
+void rbtree::balance(rbnode* x) {
     while (true) {
         // loop invarient: node is red.
         // we don't want two consecutive nodes (node and it's parent) to be red.
         
-        // if node's parent is black. then we're done.
-        if (node->parent && node->parent->is_black_node()) {
+        /*
+            notation used in rb tree representation in comments.
+                g  = black grand parent
+                p  = black parent
+                u  = black uncle
+         
+                X  = newly inserted red node
+                G  = red grand parent
+                P  = red parent
+                U  = red uncle
+         */
+        auto p = x->parent;
+
+        // if node's parent is black or null node(black). then we're done.
+        if (!p || p->is_black_node()) {
             break;
         }
-        /*
-         notation used in rb tree representation in comments.
-            g  = black grand parent
-            p  = black parent
-            u  = black uncle
-            
-            X  = newly inserted red node
-            G  = red grand parent
-            P  = red parent
-            U  = red uncle
-         */
         
         /* case 1: uncle is red.
             fix: recolor parent, grand-parent and uncle.
@@ -371,7 +376,16 @@ void rbtree::balance(rbnode* node) {
                   P     U                                    p     u
                  / \   / \                                  / \   / \
                 X                                          X
+
+                  ...                                        ...
+                    \                                          \
+                     g             recolor (g, p, u)            G
+                   /   \          ------------------->        /   \
+                  U     P                                    u     p
+                 / \   / \                                  / \   / \
+                          X                                          X
          */
+        // TODO: implement case 1
         
         /* case 2: uncle is black (node is internal. falls within uncle and parent subtree).
             fix: rotate around parent. This rotation leads to case 3.
@@ -392,6 +406,7 @@ void rbtree::balance(rbnode* node) {
               / \   / \                                       / \   / \
                    X                                                   P
          */
+        // TODO: implement case 2
         
         /* case 3: uncle is black (node is external. falls outside of uncle and parent's subtree)
             fix: rotate around grand-parent and swap colors of grand-parent & parent.
@@ -414,7 +429,11 @@ void rbtree::balance(rbnode* node) {
                   a   X                                    u   a
                                                           / \
          */
+        // TODO: implement case 3
     }
+    
+    // in case if root's color is changed by case-1.
+    // reset it's color to black.
 }
 
 void rbtree::right_rotate(rbnode* y) {
@@ -511,6 +530,21 @@ int rbtree::depth(rbnode* node) {
     auto right_depth = depth(node->right);
     
     return 1 + max(left_depth, right_depth);
+}
+
+void rbtree::inorder() {
+    inorder_traversal(root);
+}
+
+void rbtree::inorder_traversal(rbnode* node) {
+    if (!node) {
+        return;
+    }
+    
+    inorder_traversal(node->left);
+    auto color = node->is_black_node() ? "(black)" : "(red)";
+    cout << node->key << color << endl;
+    inorder_traversal(node->right);
 }
 
 int rbtree::depth() {
