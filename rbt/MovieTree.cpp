@@ -15,8 +15,6 @@ MovieTree::MovieTree() {
     // nil nodes are treated as black nodes.
     nil = new MovieNode;
     nil->isRed = false;
-    nil->leftChild = nil;
-    nil->rightChild = nil;
     root = nil;
 }
 
@@ -188,7 +186,6 @@ void MovieTree::rentMovie(std::string title) {
     // If movie quantity is zero, delete it from movie tree.
     if (foundMovie->quantity <= 0) {
         rbDelete(foundMovie);
-        //deleteMovieNode(foundMovie->title);
         // At this point foundMovie is invalid. Don't use foundMovie.
         foundMovie = nil;
     }
@@ -625,7 +622,7 @@ int MovieTree::countLongestPath(MovieNode* node) {
 
 MovieNode* MovieTree::searchMovieTree(MovieNode* node, std::string title) {
     if (node == nil) {
-        return nullptr;
+        return nil;
     }
     
     if (node->title == title) {
