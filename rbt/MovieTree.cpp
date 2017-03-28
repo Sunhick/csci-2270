@@ -15,7 +15,8 @@ MovieTree::MovieTree() {
     // nil nodes are treated as black nodes.
     nil = new MovieNode;
     nil->isRed = false;
-    
+    nil->leftChild = nil;
+    nil->rightChild = nil;
     root = nil;
 }
 
@@ -34,58 +35,48 @@ MovieTree::~MovieTree() {
 }
 
 // Returns 0 if the tree is invalid, otherwise returns the black node height.
-int MovieTree::rbValid(MovieNode * node)
-{
+int MovieTree::rbValid(MovieNode* node) {
     int lh = 0;
     int rh = 0;
     
     // If we are at a nil node just return 1
-    if (node == nil)
+    if (node == nil) {
         return 1;
-    
-    else
-    {
-        // First check for consecutive red links.
-        if (node->isRed)
-        {
-            if(node->leftChild->isRed || node->rightChild->isRed)
-            {
-                cout << "This tree contains a red violation" << endl;
-                return 0;
-            }
-        }
-        
-        // Check for valid binary search tree.
-        if ((node->leftChild != nil && node->leftChild->title.compare(node->title) > 0) || (node->rightChild != nil && node->rightChild->title.compare(node->title) < 0))
-        {
-            cout << "This tree contains a binary tree violation" << endl;
-            return 0;
-        }
-        
-        // Deteremine the height of let and right children.
-        lh = rbValid(node->leftChild);
-        rh = rbValid(node->rightChild);
-        
-        // black height mismatch
-        if (lh != 0 && rh != 0 && lh != rh)
-        {
-            cout << "This tree contains a black height violation" << endl;
-            return 0;
-        }
-        
-        // If neither height is zero, incrament if it if black.
-        if (lh != 0 && rh != 0)
-        {
-            if (node->isRed)
-                return lh;
-            else
-                return lh+1;
-        }
-        
-        else
-            return 0;
-
     }
+    
+    // First check for consecutive red links.
+    if (node->isRed) {
+        if(node->leftChild->isRed || node->rightChild->isRed) {
+            cout << "This tree contains a red violation" << endl;
+            return 0;
+        }
+    }
+    
+    // Check for valid binary search tree.
+    if ((node->leftChild != nil && node->leftChild->title.compare(node->title) > 0) ||
+        (node->rightChild != nil && node->rightChild->title.compare(node->title) < 0)) {
+        cout << "This tree contains a binary tree violation" << endl;
+        return 0;
+    }
+    
+    // Deteremine the height of let and right children.
+    lh = rbValid(node->leftChild);
+    rh = rbValid(node->rightChild);
+    
+    // black height mismatch
+    if (lh != 0 && rh != 0 && lh != rh) {
+        cout << "This tree contains a black height violation" << endl;
+        return 0;
+    }
+    
+    // If neither height is zero, incrament if it if black.
+    if (lh != 0 && rh != 0) {
+        if (node->isRed)
+            return lh;
+        return lh+1;
+    }
+    
+    return 0;
 }
 
 void MovieTree::printMovieInventory() {
@@ -97,7 +88,20 @@ int MovieTree::countMovieNodes() {
 }
 
 void MovieTree::deleteMovieNode(std::string title) {
+    auto found = searchMovieTree(root, title);
     
+    if (found == nil) {
+        //If movie not found in tree
+        cout << "Movie not found." << endl;
+        return;
+    }
+    
+    rbDelete(found);
+    
+    if(!rbValid(root)) {
+        // flag if the tree isn't valid.
+        throw runtime_error("invalid rb tree deletion!");
+    }
 }
 
 void MovieTree::addMovieNode(int ranking, std::string title, int releaseYear, int quantity) {
@@ -183,9 +187,10 @@ void MovieTree::rentMovie(std::string title) {
     
     // If movie quantity is zero, delete it from movie tree.
     if (foundMovie->quantity <= 0) {
-        deleteMovieNode(foundMovie->title);
+        rbDelete(foundMovie);
+        //deleteMovieNode(foundMovie->title);
         // At this point foundMovie is invalid. Don't use foundMovie.
-        foundMovie = nullptr;
+        foundMovie = nil;
     }
 }
 
@@ -197,7 +202,7 @@ int MovieTree::countLongestPath() {
     return countLongestPath(root);
 }
 
-void MovieTree::DeleteAll(MovieNode * node) {
+void MovieTree::DeleteAll(MovieNode* node) {
     //use this for the post-order traversal deletion of the tree
     if (node == nil) {
         // no node to delete.
@@ -207,11 +212,14 @@ void MovieTree::DeleteAll(MovieNode * node) {
     DeleteAll(node->leftChild);
     DeleteAll(node->rightChild);
     
+    //For all movies in tree
+    cout << "Deleting: " << node->title << endl;
+    
     delete node;
     node = nil;
 }
 
-void MovieTree::printMovieInventory(MovieNode * node) {
+void MovieTree::printMovieInventory(MovieNode* node) {
     if (node == nil) {
         return;
     }
@@ -224,7 +232,7 @@ void MovieTree::printMovieInventory(MovieNode * node) {
     printMovieInventory(node->rightChild);
 }
 
-void MovieTree::rbAddFixup(MovieNode * x) {
+void MovieTree::rbAddFixup(MovieNode* x) {
     // called after insert to fix tree
     while (true) {
         // loop invarient: node is red.
@@ -372,7 +380,7 @@ void MovieTree::rbAddFixup(MovieNode * x) {
     root->isRed = false;
 }
 
-void MovieTree::leftRotate(MovieNode * x) {
+void MovieTree::leftRotate(MovieNode* x) {
     //rotate the tree left with x as the root of the rotation
     /*
                 x                                          y
@@ -413,11 +421,56 @@ void MovieTree::leftRotate(MovieNode * x) {
     y->leftChild = x;
     x->parent = y;
 }
-void MovieTree::rbDelete(MovieNode * z) {
+void MovieTree::rbDelete(MovieNode* z) {
     //delete a node. Call this from deleteMovieNode, the actual delete functionality happens here.
+    MovieNode * y = z;
+    MovieNode * x = nil;
+    bool yOrigColor = y->isRed;
+    
+    if (z->leftChild == nil)
+    {
+        x = z->rightChild;
+        rbTransplant(z,z->rightChild);
+    }
+    else if (z->rightChild == nil)
+    {
+        x = z->leftChild;
+        rbTransplant(z,z->leftChild);
+    }
+    else
+    {
+        // y = tree min of right
+        y = z->rightChild;
+        while (y->leftChild != nil) {
+            y = y->leftChild ;
+        }
+        
+        yOrigColor = y->isRed;
+        x = y->rightChild;
+        
+        if (y->parent == z) {
+            x->parent = y;
+        } else {
+            rbTransplant(y,y->rightChild);
+            y->rightChild = z->rightChild;
+            y->rightChild->parent = y;
+        }
+        
+        rbTransplant(z,y);
+        y->leftChild = z->leftChild;
+        y->leftChild->parent = y;
+        y->isRed = z->isRed;
+    }
+    
+    // Actually the node.
+    delete z;
+    
+    // Check if we need to now fix the tree.
+    if (yOrigColor == false)
+        rbDeleteFixup(x);
 }
 
-void MovieTree::rightRotate(MovieNode * y) {
+void MovieTree::rightRotate(MovieNode* y) {
     //rotate the tree right with x as the root of the rotation
     /*
                  y                                        x
@@ -458,35 +511,119 @@ void MovieTree::rightRotate(MovieNode * y) {
     x->rightChild = y;
     y->parent = x;
 }
-void MovieTree::rbDeleteFixup(MovieNode * node) {
+
+void MovieTree::rbDeleteFixup(MovieNode* node) {
     //called after delete to fix the tree
+    MovieNode* w = NULL;
+    
+    // Now we restore the red-black properties.
+    while ((node != root) && (node->isRed == false))
+    {
+        // If we are a left child
+        if (node == node->parent->leftChild) {
+            w = node->parent->rightChild;
+            
+            // If helper is red
+            if (w->isRed) {
+                w->isRed = false;
+                node->parent->isRed = true;
+                leftRotate(node->parent);
+                w = node->parent->rightChild;
+            }
+            
+            // If helper's children are both black
+            if (w->leftChild->isRed == false && w->rightChild->isRed == false) {
+                w->isRed = true;
+                node = node->parent;
+            }
+            else {
+                if (w->rightChild->isRed == false) {
+                    // case 3
+                    w->leftChild->isRed = false;
+                    w->isRed = true;
+                    rightRotate(w);
+                    w = node->parent->rightChild;
+                }
+                // case 4
+                w->isRed = node->parent->isRed;
+                node->parent->isRed = false;
+                w->rightChild->isRed = false;
+                leftRotate(node->parent);
+                node = root;
+            }
+        }
+        
+        // If we are a right child
+        else {
+            
+            // helper is the left child
+            w = node->parent->leftChild;
+            // If helper is red
+            if (w->isRed) {
+                w->isRed = false;
+                node->parent->isRed = true;
+                rightRotate(node->parent);
+                w = node->parent->leftChild;
+            }
+            
+            // If helper's children are both black
+            if (w->leftChild->isRed == false && w->rightChild->isRed == false) {
+                w->isRed = true;
+                node = node->parent;
+            }
+            
+            else {
+                if (w->leftChild->isRed == false) {
+                    // case 3
+                    w->rightChild->isRed = false;
+                    w->isRed = true;
+                    leftRotate(w);
+                    w = node->parent->leftChild;
+                }
+                
+                // case 4
+                w->isRed = node->parent->isRed;
+                node->parent->isRed = false;
+                w->leftChild->isRed = false;
+                rightRotate(node->parent);
+                node = root;
+            }
+        }
+    }
+    
+    node->isRed = false;
 }
+
 void MovieTree::rbTransplant(MovieNode * u, MovieNode * v) {
     //replace node u in tree with node v. Your solution doesn't necessarily need to use this method
-
+    if (u->parent == nil)
+        root = v;
+    else if (u == u->parent->leftChild)
+        u->parent->leftChild = v;
+    else
+        u->parent->rightChild = v;
+    
+    v->parent = u->parent;
 }
 
-int MovieTree::countMovieNodes(MovieNode *node) {
+int MovieTree::countMovieNodes(MovieNode* node) {
     //number of unique titles in the tree
-    if (node == nil) {
-        // no nodes.
-        return 0;
-    }
     
     // root node (1) + # of nodes on left subtree + # of nodes on right subtree.
-    return 1 + countMovieNodes(node->leftChild) + countMovieNodes(node->rightChild);
+    return (
+            (node == nil) ? 0 : (1 + countMovieNodes(node->leftChild) + countMovieNodes(node->rightChild))
+            );
 }
 
-int MovieTree::countLongestPath(MovieNode *node) {
+int MovieTree::countLongestPath(MovieNode* node) {
     //longest path from node to a leaf node in the tree
-    if (node == nil) {
-        return 0;
-    }
     
-    return 1 + max(countLongestPath(node->leftChild), countLongestPath(node->rightChild));
+    return (
+            (node == nil) ? 0 : (1 + max(countLongestPath(node->leftChild), countLongestPath(node->rightChild)))
+            );
 }
 
-MovieNode* MovieTree::searchMovieTree(MovieNode * node, std::string title) {
+MovieNode* MovieTree::searchMovieTree(MovieNode* node, std::string title) {
     if (node == nil) {
         return nullptr;
     }
