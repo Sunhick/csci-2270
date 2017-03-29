@@ -57,13 +57,13 @@ void PopulateCatalog(MovieTree* catalog, string filename) {
 int main(int argc, const char * argv[]) {
     
     string dmenu =  "======Main Menu======\n"
-                    "1. Rent a movie\n"
-                    "2. Print the inventory\n"
-                    "3. Delete a movie\n"
-                    "4. Count the movies\n"
-                    "5. Count the longest path\n"
-                    "6. Quit\n";
-    
+                    "1. Find a movie\n"
+                    "2. Rent a movie\n"
+                    "3. Print the inventory\n"
+                    "4. Delete a movie\n"
+                    "5. Count the movies\n"
+                    "6. Count the longest path\n"
+                    "7. Quit\n";
     
     if (argc < 2){
         die("Missing movie collection file!");
@@ -90,17 +90,26 @@ int main(int argc, const char * argv[]) {
                 string title;
                 cout << "Enter title:" << endl;
                 std::getline(cin, title);
-                catalog.rentMovie(title);
+                catalog.findMovie(title);
                 break;
             }
                 
             case 2:
             {
-                catalog.printMovieInventory();
+                string title;
+                cout << "Enter title:" << endl;
+                std::getline(cin, title);
+                catalog.rentMovie(title);
                 break;
             }
                 
             case 3:
+            {
+                catalog.printMovieInventory();
+                break;
+            }
+                
+            case 4:
             {
                 string title;
                 cout << "Enter title:" << endl;
@@ -109,19 +118,19 @@ int main(int argc, const char * argv[]) {
                 break;
             }
                 
-            case 4:
+            case 5:
             {
                 cout << "Tree contains: " << catalog.countMovieNodes() << " movies." << endl;
                 break;
             }
                 
-            case 5:
+            case 6:
             {
                 cout << "Longest Path: " << catalog.countLongestPath() << endl;
                 break;
             }
                 
-            case 6:
+            case 7:
             {
                 done = true;
                 break;
