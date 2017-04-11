@@ -34,10 +34,12 @@ private:
     void print(Node* node);
     void countNodes(Node* node, int* c);
     Node* search(int key);
-    Node* searchRecursive(Node *node, int value);
     Node* treeMinimum(Node *node);
     void leftRotate(Node* node);
     void rightRotate(Node* node);
+    void addFixup(Node* node);
+    void deleteFixup(Node* node);
+    
     Node* root;
 };
 
