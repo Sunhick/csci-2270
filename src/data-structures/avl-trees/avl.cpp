@@ -175,8 +175,16 @@ Node* AvlTree::search(int key) {
     return temp;
 }
 
-Node* AvlTree::treeMinimum(Node *node) {
-    return nullptr;
+Node* AvlTree::treeMinimum(Node* node) {
+    if (!node) {
+        return nullptr;
+    }
+    
+    while(node->left) {
+        node = node->left;
+    }
+    
+    return node;
 }
 
 void AvlTree::addFixup(Node* node) {
