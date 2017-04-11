@@ -16,6 +16,15 @@ struct Node {
     Node* left;
     Node* right;
     Node* parent;
+    int height;
+    
+    Node(int v) {
+        value = v;
+        height = 0;
+        left = nullptr;
+        right = nullptr;
+        parent = nullptr;
+    }
 };
 
 class AvlTree {
@@ -39,6 +48,8 @@ private:
     void rightRotate(Node* node);
     void addFixup(Node* node);
     void deleteFixup(Node* node);
+    int height(Node* node);
+    bool isBalanced(Node* node);
     
     Node* root;
 };

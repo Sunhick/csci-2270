@@ -37,8 +37,54 @@ void AvlTree::deleteNode(int value) {
     
 }
 
+int AvlTree::height(Node* node) {
+    return node ? node->height : 0;
+}
+
 void AvlTree::addNode(int value) {
+    auto node = new Node(value);
     
+    // update the height
+    node->height = 1;
+    
+    if (root == nullptr) {
+        // no root.
+        root = node;
+        return;
+    }
+    
+    auto temp = root;
+    auto parent = root;
+    
+    while (temp) {
+        parent = temp;
+        parent->height += 1;
+        temp = value > temp->value ? temp->right : temp->left;
+    }
+    
+    // parent shouldn't be nullptr at this point.
+    node->parent = parent;
+    
+    if (value > parent->value) parent->right = node;
+    else parent->left = node;
+    
+    addFixup(node);
+    
+    if (!isBalanced(root)) {
+        // No need for new runtime_error here. If i do new, who's responsible for delete ?
+        // It's better use copy ctor here and let the object delete on it's own (out of scope).
+        // Hence all exceptions in c++ should be copyable to avoid resposibility of deletion of
+        // newly created exception object.
+        // throw new runtime_error("Tree is not balanced!"); // bad practice. delete ?
+        
+        // Also some compiler may elide copy ctor (a way to avoid unnecessary copies).
+        throw runtime_error("Tree is not balanced!");
+    }
+}
+
+bool AvlTree::isBalanced(Node* node) {
+    // TODO: implement this
+    return false;
 }
 
 bool AvlTree::findNode(int key) {
