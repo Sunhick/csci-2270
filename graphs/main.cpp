@@ -11,6 +11,7 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 #include "Graph.h"
 
@@ -21,8 +22,8 @@ void die(string message) {
     exit(0);
 }
 
-Graph<string>&& PopulateNetwork(string filename) {
-    Graph<string> network;
+unique_ptr<Graph<string>> PopulateNetwork(string filename) {
+    unique_ptr<Graph<string>> network(new Graph<string>());
     
     ifstream file(filename);
     
@@ -32,10 +33,39 @@ Graph<string>&& PopulateNetwork(string filename) {
     }
     
     string line;
+    vector<string> cities;
     
     while(std::getline(file, line)) {
         stringstream lineStream(line);
         
+        string city, id;
+        std::getline(lineStream, id, ',');
+        
+        if (id == "cities") {
+            while (std::getline(lineStream, city, ',')) {
+                // collect all cities. Add it as a vertex.
+                cities.push_back(city);
+                network->addVertex(city);
+            }
+            continue;
+        }
+        
+        // must be an edge
+        auto fromCity = id;
+        int dist = 0;
+        int index = 0;
+        
+        while (lineStream >> dist) {
+            
+            // ignore the char comma from the input stream.
+            char ignoreComma;
+            lineStream >> ignoreComma;
+            
+            // add the edges
+            auto toCity = cities[index];
+            network->addEdge(fromCity, toCity, dist);
+            index++;
+        }
         
     }
     
@@ -71,6 +101,7 @@ int main(int argc, const char * argv[]) {
         switch (choice) {
             case 1:
             {
+                network->displayEdges();
                 break;
             }
                 
@@ -102,40 +133,3 @@ int main(int argc, const char * argv[]) {
     cout << "Goodbye!" << endl;
     return 0;
 }
-
-//#include <iostream>
-//#include <vector>
-//#include "Graph.h"
-//
-//using namespace std;
-//
-//
-//int main()
-//{
-//    Graph<string> g;
-//    g.addVertex("Boulder");
-//    g.addVertex("Denver");
-//    g.addVertex("New Mexico");
-//    g.addVertex("Texas");
-//    g.addVertex("New Orleans");
-//    //edge written to be undirected
-//    g.addEdge("Boulder", "Denver", 30);
-//    g.addEdge("Boulder", "New Mexico", 200);
-//    g.addEdge("Boulder", "Texas", 500);
-//    g.addEdge("Denver", "Texas", 300);
-//    g.addEdge("Texas", "New Orleans", 500);
-//    g.displayEdges();
-//
-//    Graph<int> g2;
-//    g2.addVertex(5);
-//    g2.addVertex(6);
-//    g2.addVertex(7);
-//    g2.addVertex(8);
-//    g2.addEdge(5,6,30);
-//    g2.addEdge(5,7,300);
-//    g2.addEdge(7,8,10);
-//    g2.displayEdges();
-//    
-//    
-//    return 0;
-//}

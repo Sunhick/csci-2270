@@ -14,7 +14,6 @@ template<class T>
 Graph<T>::~Graph()
 {
     //dtor
-
 }
 
 template<class T>
