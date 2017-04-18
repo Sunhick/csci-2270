@@ -23,7 +23,7 @@ void die(string message) {
 }
 
 unique_ptr<Graph<string>> PopulateNetwork(string filename) {
-    unique_ptr<Graph<string>> network(new Graph<string>());
+    auto network = unique_ptr<Graph<string>>(new Graph<string>());
     
     ifstream file(filename);
     
@@ -69,7 +69,8 @@ unique_ptr<Graph<string>> PopulateNetwork(string filename) {
         
     }
     
-    return std::move(network);
+    // take advantage of copy elision.
+    return network;
 }
 
 int main(int argc, const char * argv[]) {
@@ -101,17 +102,25 @@ int main(int argc, const char * argv[]) {
         switch (choice) {
             case 1:
             {
-                network->displayEdges();
+                network->displayVertices();
                 break;
             }
                 
             case 2:
             {
+                network->assignDistrictIds();
                 break;
             }
                 
             case 3:
             {
+                string start, end;
+                cout << "Enter a starting city:" << endl;
+                std::getline(cin, start);
+                cout << "Enter an ending city:" << endl;
+                std::getline(cin, end);
+                
+                network->findShortestPath(start, end);
                 break;
             }
                 
