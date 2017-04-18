@@ -9,10 +9,7 @@
 #include "Graph.h"
 
 #include <set>
-#include <map>
 #include <queue>
-#include <vector>
-#include <iostream>
 #include <algorithm>
 
 using namespace std;
@@ -232,7 +229,7 @@ void Graph<T>::dijkstra(string dest, string src) {
     for (auto& v : vertices) {
         dist[v.name] = INFINITY;    // Unknown distance from source to v
         prev[v.name] = UNDEFINED;   // Previous node in optimal path from source
-        q.insert(&v);           // All nodes initially in Q (unvisited nodes)
+        q.insert(&v);               // All nodes initially in Q (unvisited nodes)
     }
     
     // Distance from source to source
@@ -264,6 +261,7 @@ void Graph<T>::dijkstra(string dest, string src) {
             break;
         }
         
+        // remove u from Q
         q.erase(u);
         
         // where v is still in Q.
@@ -278,13 +276,16 @@ void Graph<T>::dijkstra(string dest, string src) {
         }
     }
     
-    auto u = dest;
-    
+    // Now we can read the shortest path from
+    // source to target by reverse iteration.
+    printPath(dest, dist, prev);
+}
+
+template <class T>
+void Graph<T>::printPath(string u, map<string, int>& dist, map<string, string>& prev) {
     // print distance.
     cout << dist[u] << ", ";
     
-    // Now we can read the shortest path from
-    // source to target by reverse iteration.
     while (prev[u] != UNDEFINED) {
         cout << u << ", ";
         u = prev[u];
