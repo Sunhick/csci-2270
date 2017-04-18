@@ -1,0 +1,4 @@
+cities,Boston,Boulder,Chicago
+Boston,0,2000,982
+Boulder,2000,0,-1
+Chicago,982,-1,0
