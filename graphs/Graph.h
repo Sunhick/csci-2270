@@ -44,7 +44,13 @@ public:
 private:
     std::vector<vertex<T>> vertices;
     
+    static constexpr int INFINITY = 999999;
+    std::string UNDEFINED = "undefined";
+    
+    vertex<T>* findCity(std::string);
     void bfsAssignId(vertex<T>&, int);
+    void dijkstra(std::string, std::string);
+    int length(vertex<T>*, std::string);
 };
 
 #include "Graph.cpp"
