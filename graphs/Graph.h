@@ -46,7 +46,7 @@ private:
     std::vector<vertex<T>> vertices;
     
     static constexpr int INFINITY = 999999;
-    std::string UNDEFINED = "undefined";
+    std::string UNDEFINED = "#undefined#";
     
     vertex<T>* findCity(std::string);
     void bfsAssignId(vertex<T>&, int);

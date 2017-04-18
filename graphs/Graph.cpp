@@ -237,11 +237,10 @@ void Graph<T>::dijkstra(string dest, string src) {
     
     auto minDist = [](set<vertex<T>*> q, map<string, int> dist) {
         vertex<T>* min = nullptr;
-        auto d = INFINITY;
+        double d = INFINITY;
         for (auto e : q) {
             if (!min) {
                 min = e;
-                d = INFINITY;
             }
             
             if (dist[e->name] < d) {
