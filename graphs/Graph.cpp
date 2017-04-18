@@ -98,7 +98,7 @@ void Graph<T>::displayVertices() {
         // print the adjacent cities.
         for (auto& adjCity : city.adj) {
             if (adjCity.weight == -1) continue;
-            if (hasMultipleEntries) cout << "**";
+            if (hasMultipleEntries) cout << "***";
             cout << adjCity.v->name;
             hasMultipleEntries = true;
         }
