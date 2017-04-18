@@ -10,6 +10,7 @@
 
 #include <set>
 #include <queue>
+#include <sstream>
 #include <algorithm>
 
 using namespace std;
@@ -282,13 +283,20 @@ void Graph<T>::dijkstra(string dest, string src) {
 
 template <class T>
 void Graph<T>::printPath(string u, map<string, int>& dist, map<string, string>& prev) {
-    // print distance.
-    cout << dist[u] << ", ";
+    // print hop count.
+    stringstream path;
     
+    // actual distance.
+    // cout << dist[u] << ", ";
+    
+    auto hops = 0;
     while (prev[u] != UNDEFINED) {
-        cout << u << ", ";
+        path << u << ", ";
+        hops++;
         u = prev[u];
     }
     
-    cout << u << endl;
+    path << u << endl;
+    
+    cout << hops << ", " << path.str();
 }
