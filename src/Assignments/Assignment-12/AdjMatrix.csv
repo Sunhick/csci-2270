@@ -1,0 +1,16 @@
+cities,Atlanta,Boston,Boulder,Cheyenne,Chicago,Cleveland,Disneyland,Key West,Miami,New Orleans,New York,Portland,San Francisco,Seattle,Yakima
+Atlanta,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0
+Boston,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0
+Boulder,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0
+Cheyenne,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1
+Chicago,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0
+Cleveland,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0
+Disneyland,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0
+Key West,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+Miami,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0
+New Orleans,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+New York,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+Portland,0,0,0,1,0,0,1,0,0,0,0,0,1,1,1
+San Francisco,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0
+Seattle,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1
+Yakima,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0
