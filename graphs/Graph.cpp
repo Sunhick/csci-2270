@@ -11,7 +11,6 @@
 #include <set>
 #include <queue>
 #include <sstream>
-#include <tuple>
 #include <algorithm>
 
 using namespace std;
@@ -194,7 +193,7 @@ void Graph<T>::findShortestPath(std::string src, std::string dest) {
     
     // if source and dest are same. Nothing to do.
     if (srcCity->name == destCity->name) {
-        cout << "0, " << src << ", " << dest << endl;
+        cout << "0," << src << "," << dest << endl;
         return;
     }
     
@@ -208,7 +207,7 @@ int Graph<T>::length(vertex<T>* u, string v) {
     for (auto adjCity : u->adj) {
         if (adjCity.v->name == v) {
             auto weight = adjCity.weight;
-            return weight == -1 ? INFINITY : 1;
+            return weight == -1 ? INFINITY : weight;
         }
     }
     
@@ -216,72 +215,89 @@ int Graph<T>::length(vertex<T>* u, string v) {
 }
 
 template <class T>
-void Graph<T>::dijkstra(string src, string dest) {
+void Graph<T>::dijkstra(string dest, string src) {
     // I swap the parameters to get the output in right format.
     // By swapping src, dest. It doesn't change anything.
     
-    // run a bfs to find the shortest distance.
-    auto city = findCity(src);
+    // cout << "Run dijkstra's algorithm here" << endl;
+    // reference: https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
     
-    // tuple of bfs node and path to dest node.
-    deque<tuple<vertex<T>*, vector<string>>> queue;
+    map<string, int> dist;
+    map<string, string> prev;
+    set<vertex<T>*> q;
     
-    vector<string> path {city->name};
-    queue.push_back(std::make_tuple(city, path));
+    // Initialization
+    for (auto& v : vertices) {
+        dist[v.name] = INFINITY;    // Unknown distance from source to v
+        prev[v.name] = UNDEFINED;   // Previous node in optimal path from source
+        q.insert(&v);               // All nodes initially in Q (unvisited nodes)
+    }
     
-    vector<vector<string>> shortest;
+    // Distance from source to source
+    dist[src] = 0;
     
-    while(!queue.empty()) {
-        auto tuple = queue.front();
-        auto city = std::get<0>(tuple);
-        auto path = std::get<1>(tuple);
-        
-        queue.pop_front();
-        
-        if (city->name == dest) {
-            // printPath(path);
-            // we have a path. Doesn't mean we have found shortest path.
-            shortest.push_back(path);
-            continue;
-        }
-        
-        for (auto& adjCity : city->adj) {
-            // check if have already visited adjCity before traversing
-            if (std::find(path.begin(), path.end(), adjCity.v->name) != path.end()) {
-                // already visited.
-                continue;
+    auto minDist = [](set<vertex<T>*> q, map<string, int> dist) {
+        vertex<T>* min = nullptr;
+        double d = INFINITY;
+        for (auto e : q) {
+            if (!min) {
+                min = e;
             }
             
-            vector<string> newPath {path};
-            newPath.push_back(adjCity.v->name);
-            queue.push_back(std::make_tuple(adjCity.v, newPath));
+            if (dist[e->name] < d) {
+                d = dist[e->name];
+                min = e;
+                break;
+            }
+        }
+        
+        return min;
+    };
+    
+    while (!q.empty()) {
+        // Node with the least distance will be selected first
+        auto u = minDist(q, dist);
+        
+        if (u->name == dest) {
+            break;
+        }
+        
+        // remove u from Q
+        q.erase(u);
+        
+        // where v is still in Q.
+        for (auto& adj : u->adj) {
+            auto v = adj.v->name;
+            auto alt = dist[u->name] + length(u, v);
+            
+            if (alt < dist[v]) {
+                dist[v] = alt;
+                prev[v] = u->name;
+            }
         }
     }
     
-    // find the shortest path
-    int minIndex = 0;
-    auto minHops = shortest[minIndex].size();
-    
-    for (int i = 1; i < shortest.size(); i++) {
-        auto hops = shortest[i].size();
-        if (hops < minHops) {
-            minHops = hops;
-            minIndex = i;
-        }
-    }
-    
-    printPath(shortest[minIndex]);
+    // Now we can read the shortest path from
+    // source to target by reverse iteration.
+    printPath(dest, dist, prev);
 }
 
 template <class T>
-void Graph<T>::printPath(vector<string> path) {
-    auto hops = path.size();
+void Graph<T>::printPath(string u, map<string, int>& dist, map<string, string>& prev) {
+    // print hop count.
+    stringstream path;
     
-    cout << hops-1 << ",";
+    // actual distance.
+    // cout << dist[u] << ",";
     
-    for (int i = 0; i < hops-1; i++) {
-        cout << path[i] << ",";
+    auto hops = 0;
+    while (prev[u] != UNDEFINED) {
+        path << u << ",";
+        hops++;
+        u = prev[u];
     }
     
-    cout << path[hops-1] << endl;
+    path << u << endl;
+    
+    cout << hops << "," << path.str();
 }

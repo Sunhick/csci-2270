@@ -52,7 +52,7 @@ private:
     void bfsAssignId(vertex<T>&, int);
     void dijkstra(std::string, std::string);
     int length(vertex<T>*, std::string);
-    void printPath(std::vector<std::string>);
+    void printPath(std::string , std::map<std::string, int>& , std::map<std::string, std::string>& );
 };
 
 #include "Graph.cpp"
