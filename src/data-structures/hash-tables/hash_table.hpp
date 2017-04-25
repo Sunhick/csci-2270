@@ -1,6 +1,6 @@
 //
 //  hash_table.hpp
-//  test22
+//  Hash Tables
 //
 //  Created by Sunil on 4/25/17.
 //  Copyright © 2017 Sunil. All rights reserved.

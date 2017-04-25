@@ -1,6 +1,6 @@
 //
 //  main.cpp
-//  test22
+//  Hash Tables
 //
 //  Created by Sunil on 4/5/17.
 //  Copyright © 2017 Sunil. All rights reserved.
