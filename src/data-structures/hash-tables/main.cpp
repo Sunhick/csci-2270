@@ -24,8 +24,5 @@ int main(int argc, const char * argv[]) {
     ht.insert("Aeroplane");
     ht.insert("eAroplane");
     
-    
-    
-    
     return 0;
 }

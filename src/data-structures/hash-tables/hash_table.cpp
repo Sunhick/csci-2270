@@ -8,12 +8,19 @@
 
 #include "hash_table.hpp"
 
+hash_table::hash_table() {
+    table = new hash_element[tableSize];
+}
+
+hash_table::~hash_table() {
+    delete[] table;
+}
+
 int hash_table::hashSum(string key, int size) {
     auto sum = 0;
     
-    for (int i = 0; i < key.length(); i++) {
+    for (int i = 0; i < key.length(); i++)
         sum = sum + key[i];
-    }
     
     sum = sum % size;
     return sum;
@@ -25,7 +32,7 @@ void hash_table::insert(string value) {
     hashElement->key = value; //set properties of new record hashElement.next = NULL
     hashElement->previous = NULL;
     
-    if (table[index].next == NULL) {
+    if (table[index].next == nullptr) {
         hashElement->previous = &table[index];
         table[index].next = hashElement;
     }

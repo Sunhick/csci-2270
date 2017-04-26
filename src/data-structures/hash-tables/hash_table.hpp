@@ -29,10 +29,12 @@ struct hash_element {
 class hash_table {
 private:
     static constexpr int tableSize = 100;
-    hash_element table[tableSize];
+    hash_element* table;
     int hashSum(string, int);
     
 public:
+    hash_table();
+    ~hash_table();
     void insert(string value);
 };
 
