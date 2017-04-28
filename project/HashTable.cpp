@@ -7,3 +7,11 @@
 //
 
 #include "HashTable.hpp"
+
+HashTable::HashTable() {
+    
+}
+
+HashTable::~HashTable() {
+    
+}

@@ -9,6 +9,16 @@
 #ifndef HashTable_hpp
 #define HashTable_hpp
 
-#include <stdio.h>
+#include <iostream>
+
+using namespace std;
+
+class HashTable {
+private:
+    
+public:
+    HashTable();
+    ~HashTable();
+};
 
 #endif /* HashTable_hpp */
