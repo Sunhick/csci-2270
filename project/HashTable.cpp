@@ -8,15 +8,17 @@
 
 #include "HashTable.hpp"
 
-HashTable::HashTable(int capacity) {
-    this->capacity = capacity;
+HashTable::HashTable(int capacity, CollisionResolver* resolverStrategy)
+    : capacity(capacity), size(0) {
     // construct zero initialized hash table of size
     table = new HashEntry *[capacity];
-    size = 0;
+    this->resolverStrategy = resolverStrategy;
 }
 
 HashTable::~HashTable() {
-    
+    clear();
+    delete resolverStrategy;
+    delete table;
 }
 
 unsigned int HashTable::hashfunc(const char* str, unsigned int seed) {
@@ -32,17 +34,37 @@ unsigned int HashTable::hashfunc(const char* str, unsigned int seed) {
 void HashTable::put(string key, PlayerInfo value) {
     auto index = getIndex(key);
     
-    table[index] = new HashEntry(value);
+    auto collision = table[index];
+    
+    if (!collision) table[index] = new HashEntry(value);
+    else resolverStrategy->add(table, new HashEntry(value), index);
+    
     size++;
 }
 
 PlayerInfo* HashTable::get(string key) {
     auto index = getIndex(key);
-    return &table[index]->player;
+    
+    auto found = table[index];
+    if (!found) return nullptr;
+    
+    return resolverStrategy->get(table, key, index);
 }
 
 void HashTable::clear() {
+    if (!table) {
+        return;
+    }
     
+    auto tsize = capacity;
+    while (tsize-- > 0) {
+        auto entry = table[tsize];
+        if (!entry) continue;
+        
+        // Delete the record. Call resolver because we
+        // don't know the internal of how collision is resolved.
+        resolverStrategy->Delete(entry);
+    }
 }
 
 void HashTable::rehash() {

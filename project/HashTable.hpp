@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "PlayerInfo.hpp"
+#include "CollisionResolver.hpp"
 
 using namespace std;
 
@@ -19,17 +20,23 @@ class HashEntry {
 public:
     PlayerInfo player;
     
-    HashEntry(PlayerInfo value) : player(value) { };
+    HashEntry(PlayerInfo value)
+        : player(value), next(nullptr), previous(nullptr)
+    { };
     
     HashEntry(const HashEntry& other) {
         // copy ctor: memberwise copy
         std::memcpy(this, &other, sizeof(HashEntry));
     }
+    
+    HashEntry* next;
+    HashEntry* previous;
 };
 
 class HashTable {
 private:
     HashEntry **table;
+    CollisionResolver *resolverStrategy;
     int capacity;
     int size;
     
@@ -37,7 +44,7 @@ private:
     inline int getIndex(string key);
     
 public:
-    HashTable(int size = 1024);
+    HashTable(int size = 1024, CollisionResolver* resolverStrategy = nullptr);
     ~HashTable();
     
     void put(string key, PlayerInfo value);

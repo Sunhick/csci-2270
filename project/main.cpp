@@ -12,16 +12,10 @@
 #include <iomanip>
 #include <iostream>
 
-#define class struct
-#define private public
-#define protected public
-
 #include "HashTable.hpp"
 #include "Utilities.hpp"
 
-#undef class
-#undef private
-#undef protected
+#include "Resolver.hpp"
 
 using namespace std;
 
@@ -43,38 +37,15 @@ void PopulateHashTable(string filename, HashTable* map) {
     string ignoreHeader;
     std::getline(file, ignoreHeader);
     
-//    cout << ignoreHeader << endl;
-//    std::setiosflags(ios::fixed);
+    // cout << ignoreHeader << endl;
+    // std::setiosflags(ios::fixed);
     
     while(std::getline(file, line)) {
-        // Format of the line:
-        // yearID       : int
-        // teamID       : string
-        // leagueID     : string
-        // playerID     : string
-        // salary       : long
-        // firstName    : string
-        // lastName     : string
-        // birthYear    : string
-        // birthCountry : string
-        // weight       : float
-        // height       : float
-        // bats         : int
-        // throws       : int
         auto playerInfo = Utilities::ConstructFrom(line);
         
         // add playerInfo to the hash table.
         auto key = Utilities::MakeKey(playerInfo);
         map->put(key, playerInfo);
-        
-//        auto entry = map->table[4750];
-//        playerInfo = entry->player;
-//
-//         cout << playerInfo.yearId << "," << playerInfo.teamId << "," << playerInfo.leagueId << ","
-//              << playerInfo.playerId << "," << playerInfo.salary << "," << playerInfo.firstName << ","
-//              << playerInfo.lastName << "," << playerInfo.birthYear << "," << playerInfo.birthCountry << ","
-//              << playerInfo.weight << "," << playerInfo.height << "," << playerInfo.bats << "," << playerInfo.throws
-//              << endl;
     }
 }
 
@@ -97,7 +68,7 @@ int main(int argc, const char * argv[]) {
     string filename {argv[1]};
     int hashSize = stoi(argv[2]);
     
-    HashTable* map = new HashTable(hashSize);
+    HashTable* map = new HashTable(hashSize, new ChainingResolver);
     
     // read the file and populate the map
     PopulateHashTable(filename, map);
