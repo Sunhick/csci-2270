@@ -8,10 +8,16 @@
 
 #include "HashTable.hpp"
 
-HashTable::HashTable() {
-    
+HashTable::HashTable(int size) {
+    this->size = size;
+    // construct zero initialized hash table of size
+    table = new HashEntry *[size];
 }
 
 HashTable::~HashTable() {
     
+}
+
+int HashTable::hashFunction() {
+    return 0;
 }

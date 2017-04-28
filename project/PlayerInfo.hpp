@@ -6,6 +6,9 @@
 //  Copyright © 2017 Sunil. All rights reserved.
 //
 
+#ifndef PlayerInfo_hpp
+#define PlayerInfo_hpp
+
 #include <string>
 
 using namespace std;
@@ -16,7 +19,7 @@ struct PlayerInfo {
     char bats;
     char throws;
     
-    float salary;
+    long salary;
     float weight;
     float height;
     
@@ -28,3 +31,5 @@ struct PlayerInfo {
     string birthYear;
     string birthCountry;
 };
+
+#endif /* PlayerInfo_hpp */

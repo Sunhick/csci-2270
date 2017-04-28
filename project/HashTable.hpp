@@ -11,13 +11,25 @@
 
 #include <iostream>
 
+#include "PlayerInfo.hpp"
+
 using namespace std;
+
+class HashEntry {
+public:
+    PlayerInfo player;
+    HashEntry() { };
+};
 
 class HashTable {
 private:
+    HashEntry **table;
+    int size;
+    
+    int hashFunction();
     
 public:
-    HashTable();
+    HashTable(int size = 1024);
     ~HashTable();
 };
 
