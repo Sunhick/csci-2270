@@ -12,8 +12,16 @@
 #include <iomanip>
 #include <iostream>
 
+#define class struct
+#define private public
+#define protected public
+
 #include "HashTable.hpp"
 #include "Utilities.hpp"
+
+#undef class
+#undef private
+#undef protected
 
 using namespace std;
 
@@ -34,8 +42,9 @@ void PopulateHashTable(string filename, HashTable* map) {
     
     string ignoreHeader;
     std::getline(file, ignoreHeader);
-    cout << ignoreHeader << endl;
-    std::setiosflags(ios::fixed);
+    
+//    cout << ignoreHeader << endl;
+//    std::setiosflags(ios::fixed);
     
     while(std::getline(file, line)) {
         // Format of the line:
@@ -55,12 +64,17 @@ void PopulateHashTable(string filename, HashTable* map) {
         auto playerInfo = Utilities::ConstructFrom(line);
         
         // add playerInfo to the hash table.
-
-        // cout << playerInfo.yearId << "," << playerInfo.teamId << "," << playerInfo.leagueId << ","
-        //      << playerInfo.playerId << "," << playerInfo.salary << "," << playerInfo.firstName << ","
-        //      << playerInfo.lastName << "," << playerInfo.birthYear << "," << playerInfo.birthCountry << ","
-        //      << playerInfo.weight << "," << playerInfo.height << "," << playerInfo.bats << "," << playerInfo.throws
-        //      << endl;
+        auto key = Utilities::MakeKey(playerInfo);
+        map->put(key, playerInfo);
+        
+//        auto entry = map->table[4750];
+//        playerInfo = entry->player;
+//
+//         cout << playerInfo.yearId << "," << playerInfo.teamId << "," << playerInfo.leagueId << ","
+//              << playerInfo.playerId << "," << playerInfo.salary << "," << playerInfo.firstName << ","
+//              << playerInfo.lastName << "," << playerInfo.birthYear << "," << playerInfo.birthCountry << ","
+//              << playerInfo.weight << "," << playerInfo.height << "," << playerInfo.bats << "," << playerInfo.throws
+//              << endl;
     }
 }
 
@@ -70,7 +84,7 @@ int main(int argc, const char * argv[]) {
                     "2. Quit program\n";
     
     string help = "usage: $executable [input file] [hashtable size]\n"
-                  "example: $exe PlayerData.txt 5024";
+                  "example: $exe PlayerData.txt 5072";
     
     if (argc < 3) {
         cout << "Missing arguments to the program!" << endl;
@@ -99,6 +113,26 @@ int main(int argc, const char * argv[]) {
         switch (choice) {
             case 1:
             {
+                string firstName, lastName;
+                
+                cout << "Enter first name: " << endl;
+                std::getline(cin, firstName);
+                cout << "Enter last name: " << endl;
+                std::getline(cin, lastName);
+                
+                auto found = map->get(Utilities::MakeKey(firstName, lastName));
+                if (found) {
+                    auto playerInfo = *found;
+                    cout << playerInfo.yearId << "," << playerInfo.teamId << "," << playerInfo.leagueId << ","
+                    << playerInfo.playerId << "," << playerInfo.salary << "," << playerInfo.firstName << ","
+                    << playerInfo.lastName << "," << playerInfo.birthYear << "," << playerInfo.birthCountry << ","
+                    << playerInfo.weight << "," << playerInfo.height << "," << playerInfo.bats << ","
+                    << playerInfo.throws << endl;
+                } else {
+                    cout << "Record not found!" << endl;
+                }
+                
+                break;
             }
                 
             case 2:

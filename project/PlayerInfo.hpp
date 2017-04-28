@@ -1,5 +1,5 @@
 //
-//  PlayerInfo.cpp
+//  PlayerInfo.hpp
 //  HashTables
 //
 //  Created by Sunil on 4/28/17.
