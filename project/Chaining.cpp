@@ -8,7 +8,9 @@
 
 #include <iostream>
 
-#include "Resolvers.hpp"
+#include "HashTable.hpp"
+#include "PlayerInfo.hpp"
+#include "CollisionResolver.hpp"
 
 PlayerInfo* ChainingResolver::get(HashEntry**& table, string key, int index) {
     cout << "chaining get for: " << key << endl;

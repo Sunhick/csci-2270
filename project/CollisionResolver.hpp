@@ -26,4 +26,24 @@ public:
     virtual ~CollisionResolver() { }
 };
 
+// open addressing (using linear probing)
+class LinearProbingResolver : public CollisionResolver {
+public:
+    virtual void add(HashEntry**& table, HashEntry* entry, int index) override;
+    virtual PlayerInfo* get(HashEntry**& table, string key, int index) override;
+    virtual void Delete(HashEntry* entry) override;
+    
+    virtual ~LinearProbingResolver();
+};
+
+// collsion resolution using chaining
+class ChainingResolver : public CollisionResolver {
+public:
+    virtual void add(HashEntry**& table, HashEntry* entry, int index) override;
+    virtual PlayerInfo* get(HashEntry**& table, string key, int index) override;
+    virtual void Delete(HashEntry* entry) override;
+    
+    virtual ~ChainingResolver();
+};
+
 #endif /* CollisionResolver_hpp */
