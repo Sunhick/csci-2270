@@ -15,7 +15,7 @@
 #include "HashTable.hpp"
 #include "Utilities.hpp"
 
-#include "Resolver.hpp"
+#include "Resolvers.hpp"
 
 using namespace std;
 
@@ -69,9 +69,11 @@ int main(int argc, const char * argv[]) {
     int hashSize = stoi(argv[2]);
     
     HashTable* map = new HashTable(hashSize, new ChainingResolver);
+    HashTable* map2 = new HashTable(hashSize, new LinearProbingResolver);
     
-    // read the file and populate the map
+    // read the file and populate the map, map2
     PopulateHashTable(filename, map);
+    PopulateHashTable(filename, map2);
 
     do {
         cout << dmenu;
