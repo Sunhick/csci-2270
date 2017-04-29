@@ -13,7 +13,6 @@
 #include "CollisionResolver.hpp"
 
 PlayerInfo* ChainingResolver::get(HashTable* map, string key, int index) {
-//    cout << "chaining get for: " << key << endl;
     auto entry = map->table[index];
     while (entry) {
         if (entry->player.key() == key) return &entry->player;
@@ -24,13 +23,18 @@ PlayerInfo* ChainingResolver::get(HashTable* map, string key, int index) {
 }
 
 void ChainingResolver::add(HashTable* map, HashEntry* entry, int index) {
-//    cout << "chaining add for: " << entry->player.firstName << entry->player.lastName << endl;
     auto collidedEntry = map->table[index];
-    while (collidedEntry->next) {
+    while (!collidedEntry->player.areSame(entry->player) && collidedEntry->next) {
         collidedEntry = collidedEntry->next;
     }
     
-    collidedEntry->next = entry;
+    // match at the last entry ?
+    if (collidedEntry->player.areSame(entry->player)) {
+        collidedEntry->player.addMoreInfo(entry->player);
+    } else {
+        // no match found. just add it at the end of list.
+        collidedEntry->next = entry;
+    }
 }
 
 void ChainingResolver::Delete(HashEntry* entry) {

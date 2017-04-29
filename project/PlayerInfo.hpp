@@ -10,29 +10,40 @@
 #define PlayerInfo_hpp
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
+struct TeamInfo {
+    string teamId;
+    string leagueId;
+    int yearId;
+    long salary;
+};
+
 class PlayerInfo {
 public:
-    int yearId;
     
     char bats;
     char throws;
     
-    long salary;
     float weight;
     float height;
     
-    string teamId;
+    vector<TeamInfo> teams;
+    
     string playerId;
-    string leagueId;
     string firstName;
     string lastName;
     string birthYear;
     string birthCountry;
     
     string key() const;
+    bool areSame(const PlayerInfo&) const;
+    const string uid() const;
+    void addMoreInfo(const PlayerInfo& samePerson);
+    
+    void show() const;
     
     static PlayerInfo ConstructFrom(string line);
     static string MakeKey(string firstName, string lastName);

@@ -9,6 +9,9 @@
 #include "PlayerInfo.hpp"
 
 #include <sstream>
+#include <iostream>
+
+using namespace std;
 
 PlayerInfo PlayerInfo::ConstructFrom(string line) {
     stringstream lineStream(line);
@@ -56,12 +59,16 @@ PlayerInfo PlayerInfo::ConstructFrom(string line) {
     lineStream >> bats;         lineStream >> ignoreComma;
     lineStream >> throws;
     
-    return {
+    TeamInfo teamInfo = {
         .yearId = yearId,
         .teamId = teamId,
         .leagueId = leagueId,
+        .salary = salary
+    };
+    
+    return {
+        .teams = {teamInfo},
         .playerId = playerId,
-        .salary = salary,
         .firstName = firstName,
         .lastName = lastName,
         .birthYear = birthYear,
@@ -71,6 +78,49 @@ PlayerInfo PlayerInfo::ConstructFrom(string line) {
         .bats = bats,
         .throws = throws
     };
+}
+
+bool PlayerInfo::areSame(const PlayerInfo& player) const {
+    return uid() == player.uid();
+}
+
+const string PlayerInfo::uid() const {
+    // generate a unique identifier for this player.
+    // Firstname, lastName, birth year, birth country, weight and height uniquely identifies a player.
+    // Can i compare based on player Id ?
+    auto uid = (
+            firstName + lastName + birthYear + birthCountry + std::to_string(weight) + std::to_string(height)
+    );
+    
+    // convert to lower
+    std::transform(uid.begin(), uid.end(), uid.begin(), ::tolower);
+    return uid;
+}
+
+void PlayerInfo::show() const {
+    cout << endl;
+    
+    cout << "First name: "      << firstName        << endl;
+    cout << "Last name: "       << lastName         << endl;
+    cout << "Year born: "       << birthYear        << endl;
+    cout << "Country born: "    << birthCountry     << endl;
+    cout << "Weight: "          << weight           << endl;
+    cout << "Height: "          << height           << endl;
+    cout << "Bats: "            << bats             << endl;
+    cout << "Throws: "          << throws           << endl;
+    
+    cout << "Teams and salary:" << endl;
+    for (auto& teamInfo : teams) {
+        cout << teamInfo.yearId << "," << teamInfo.teamId << "," << teamInfo.leagueId << ","
+             << teamInfo.salary << endl;
+    }
+    
+    cout << endl;
+}
+
+void PlayerInfo::addMoreInfo(const PlayerInfo& samePerson) {
+    for (auto teamInfo : samePerson.teams)
+        teams.push_back(teamInfo);
 }
 
 string PlayerInfo::MakeKey(string firstName, string lastName) {

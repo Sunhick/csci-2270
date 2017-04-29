@@ -7,6 +7,7 @@
 //
 
 #include <string>
+#include <chrono>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -66,12 +67,26 @@ int main(int argc, const char * argv[]) {
     string filename {argv[1]};
     int hashSize = stoi(argv[2]);
     
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    
     HashTable* map = new HashTable(hashSize, new ChainingResolver);
     HashTable* map2 = new HashTable(hashSize, new LinearProbingResolver);
     
-    // read the file and populate the map, map2
+    // time adding to hash table with chaining
+    start = std::chrono::system_clock::now();
     PopulateHashTable(filename, map);
+    end = std::chrono::system_clock::now();
+    
+    // time adding to hash table with chaining
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::cout << "(chaining) Populate elapsed time: " << elapsed_seconds.count() << "s\n";
+    
+    // time adding to hash table with linear probing
+    start = std::chrono::system_clock::now();
     PopulateHashTable(filename, map2);
+    end = std::chrono::system_clock::now();
+    elapsed_seconds = end - start;
+    std::cout << "(linear probe) Populate elapsed time: " << elapsed_seconds.count() << "s\n";
 
     do {
         cout << dmenu;
@@ -93,12 +108,8 @@ int main(int argc, const char * argv[]) {
                 
                 auto found = map->get(PlayerInfo::MakeKey(firstName, lastName));
                 if (found) {
-                    auto playerInfo = *found;
-                    cout << playerInfo.yearId << "," << playerInfo.teamId << "," << playerInfo.leagueId << ","
-                    << playerInfo.playerId << "," << playerInfo.salary << "," << playerInfo.firstName << ","
-                    << playerInfo.lastName << "," << playerInfo.birthYear << "," << playerInfo.birthCountry << ","
-                    << playerInfo.weight << "," << playerInfo.height << "," << playerInfo.bats << ","
-                    << playerInfo.throws << endl;
+                    found->show();
+
                 } else {
                     cout << "Record not found!" << endl;
                 }
