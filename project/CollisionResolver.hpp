@@ -13,10 +13,12 @@
 
 using namespace std;
 
+// forward declaration to avoid cyclic reference
 class PlayerInfo;
 class HashTable;
 class HashEntry;
 
+// base class for all type of collision resolvers.
 class CollisionResolver {
 public:
     virtual void add(HashEntry**& table, HashEntry* entry, int index) = 0;

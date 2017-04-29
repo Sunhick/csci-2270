@@ -6,7 +6,6 @@
 //  Copyright © 2017 Sunil. All rights reserved.
 //
 
-//#include "Resolvers.hpp"
 #include "CollisionResolver.hpp"
 
 void LinearProbingResolver::add(HashEntry**& table, HashEntry* entry, int index) {

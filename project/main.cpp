@@ -15,8 +15,6 @@
 #include "HashTable.hpp"
 #include "PlayerInfo.hpp"
 
-#include "Resolvers.hpp"
-
 using namespace std;
 
 void die(string message) {
