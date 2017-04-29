@@ -29,15 +29,13 @@ unsigned int HashTable::hashfunc(const char* str, unsigned int seed) {
     return hash;
 }
 
-
-
 void HashTable::put(string key, PlayerInfo value) {
     auto index = getIndex(key);
     
     auto collision = table[index];
     
     if (!collision) table[index] = new HashEntry(value);
-    else resolverStrategy->add(table, new HashEntry(value), index);
+    else resolverStrategy->add(this, new HashEntry(value), index);
     
     size++;
 }
@@ -48,7 +46,7 @@ PlayerInfo* HashTable::get(string key) {
     auto found = table[index];
     if (!found) return nullptr;
     
-    return resolverStrategy->get(table, key, index);
+    return resolverStrategy->get(this, key, index);
 }
 
 void HashTable::clear() {

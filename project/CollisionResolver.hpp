@@ -21,8 +21,8 @@ class HashEntry;
 // base class for all type of collision resolvers.
 class CollisionResolver {
 public:
-    virtual void add(HashEntry**& table, HashEntry* entry, int index) = 0;
-    virtual PlayerInfo* get(HashEntry**& table, string key, int index) = 0;
+    virtual void add(HashTable* map, HashEntry* entry, int index) = 0;
+    virtual PlayerInfo* get(HashTable* map, string key, int index) = 0;
     virtual void Delete(HashEntry* entry) = 0;
     
     virtual ~CollisionResolver() { }
@@ -31,8 +31,8 @@ public:
 // open addressing (using linear probing)
 class LinearProbingResolver : public CollisionResolver {
 public:
-    virtual void add(HashEntry**& table, HashEntry* entry, int index) override;
-    virtual PlayerInfo* get(HashEntry**& table, string key, int index) override;
+    virtual void add(HashTable* map, HashEntry* entry, int index) override;
+    virtual PlayerInfo* get(HashTable* map, string key, int index) override;
     virtual void Delete(HashEntry* entry) override;
     
     virtual ~LinearProbingResolver();
@@ -41,8 +41,8 @@ public:
 // collsion resolution using chaining
 class ChainingResolver : public CollisionResolver {
 public:
-    virtual void add(HashEntry**& table, HashEntry* entry, int index) override;
-    virtual PlayerInfo* get(HashEntry**& table, string key, int index) override;
+    virtual void add(HashTable* map, HashEntry* entry, int index) override;
+    virtual PlayerInfo* get(HashTable* map, string key, int index) override;
     virtual void Delete(HashEntry* entry) override;
     
     virtual ~ChainingResolver();

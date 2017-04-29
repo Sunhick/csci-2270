@@ -123,5 +123,6 @@ int main(int argc, const char * argv[]) {
     
     cout << "Goodbye!" << endl;
     delete map;
+    delete map2;
     return 0;
 }

@@ -12,9 +12,9 @@
 #include "PlayerInfo.hpp"
 #include "CollisionResolver.hpp"
 
-PlayerInfo* ChainingResolver::get(HashEntry**& table, string key, int index) {
-    cout << "chaining get for: " << key << endl;
-    auto entry = table[index];
+PlayerInfo* ChainingResolver::get(HashTable* map, string key, int index) {
+//    cout << "chaining get for: " << key << endl;
+    auto entry = map->table[index];
     while (entry) {
         if (entry->player.key() == key) return &entry->player;
         entry = entry->next;
@@ -23,9 +23,9 @@ PlayerInfo* ChainingResolver::get(HashEntry**& table, string key, int index) {
     return nullptr;
 }
 
-void ChainingResolver::add(HashEntry**& table, HashEntry* entry, int index) {
-    cout << "chaining add for: " << entry->player.firstName << entry->player.lastName << endl;
-    auto collidedEntry = table[index];
+void ChainingResolver::add(HashTable* map, HashEntry* entry, int index) {
+//    cout << "chaining add for: " << entry->player.firstName << entry->player.lastName << endl;
+    auto collidedEntry = map->table[index];
     while (collidedEntry->next) {
         collidedEntry = collidedEntry->next;
     }

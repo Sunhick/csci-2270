@@ -43,6 +43,10 @@ private:
     unsigned int hashfunc(const char* str, unsigned int seed = 0);
     inline int getIndex(string key);
     
+    // Resolvers are friend classes 
+    friend class LinearProbingResolver;
+    friend class ChainingResolver;
+    
 public:
     HashTable(int size = 1024, CollisionResolver* resolverStrategy = nullptr);
     ~HashTable();
