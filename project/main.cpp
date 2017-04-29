@@ -13,7 +13,7 @@
 #include <iostream>
 
 #include "HashTable.hpp"
-#include "Utilities.hpp"
+#include "PlayerInfo.hpp"
 
 #include "Resolvers.hpp"
 
@@ -41,10 +41,10 @@ void PopulateHashTable(string filename, HashTable* map) {
     // std::setiosflags(ios::fixed);
     
     while(std::getline(file, line)) {
-        auto playerInfo = Utilities::ConstructFrom(line);
+        auto playerInfo = PlayerInfo::ConstructFrom(line);
         
         // add playerInfo to the hash table.
-        auto key = Utilities::MakeKey(playerInfo);
+        auto key = PlayerInfo::MakeKey(playerInfo);
         map->put(key, playerInfo);
     }
 }
@@ -93,7 +93,7 @@ int main(int argc, const char * argv[]) {
                 cout << "Enter last name: " << endl;
                 std::getline(cin, lastName);
                 
-                auto found = map->get(Utilities::MakeKey(firstName, lastName));
+                auto found = map->get(PlayerInfo::MakeKey(firstName, lastName));
                 if (found) {
                     auto playerInfo = *found;
                     cout << playerInfo.yearId << "," << playerInfo.teamId << "," << playerInfo.leagueId << ","

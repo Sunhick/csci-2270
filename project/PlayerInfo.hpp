@@ -13,7 +13,8 @@
 
 using namespace std;
 
-struct PlayerInfo {
+class PlayerInfo {
+public:
     int yearId;
     
     char bats;
@@ -30,6 +31,12 @@ struct PlayerInfo {
     string lastName;
     string birthYear;
     string birthCountry;
+    
+    string key() const;
+    
+    static PlayerInfo ConstructFrom(string line);
+    static string MakeKey(string firstName, string lastName);
+    static string MakeKey(PlayerInfo& player);
 };
 
 #endif /* PlayerInfo_hpp */
