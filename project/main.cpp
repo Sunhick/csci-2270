@@ -69,25 +69,37 @@ int main(int argc, const char * argv[]) {
     
     std::chrono::time_point<std::chrono::system_clock> start, end;
     
-    HashTable* map = new HashTable(hashSize, new ChainingResolver);
-    HashTable* map2 = new HashTable(hashSize, new LinearProbingResolver);
+    // create collision counter variables
+    CollisionCounter linearProbeStats("(linear probe)");
+    CollisionCounter chainingStats("(chaining)");
+    
+    HashTable* map = new HashTable(hashSize, new ChainingResolver(&chainingStats));
+    HashTable* map2 = new HashTable(hashSize, new LinearProbingResolver(&linearProbeStats));
     
     // time adding to hash table with chaining
     start = std::chrono::system_clock::now();
     PopulateHashTable(filename, map);
     end = std::chrono::system_clock::now();
     
+    chainingStats.showAddCollisions();
+    
     // time adding to hash table with chaining
     std::chrono::duration<double> elapsed_seconds = end - start;
-    std::cout << "(chaining) Populate elapsed time: " << elapsed_seconds.count() << "s\n";
+    std::cout << "(chaining) Populate table elapsed time: " << elapsed_seconds.count() << "s\n";
     
     // time adding to hash table with linear probing
     start = std::chrono::system_clock::now();
     PopulateHashTable(filename, map2);
     end = std::chrono::system_clock::now();
+    
+    linearProbeStats.showAddCollisions();
+    
     elapsed_seconds = end - start;
-    std::cout << "(linear probe) Populate elapsed time: " << elapsed_seconds.count() << "s\n";
+    std::cout << "(linear probe) Populate table elapsed time: " << elapsed_seconds.count() << "s\n";
 
+    linearProbeStats.resetCounters();
+    chainingStats.resetCounters();
+    
     do {
         cout << dmenu;
         cin >> choice;
@@ -106,12 +118,36 @@ int main(int argc, const char * argv[]) {
                 cout << "Enter last name: " << endl;
                 std::getline(cin, lastName);
                 
-                auto found = map->get(PlayerInfo::MakeKey(firstName, lastName));
-                if (found) {
-                    found->show();
-
-                } else {
-                    cout << "Record not found!" << endl;
+                auto key = PlayerInfo::MakeKey(firstName, lastName);
+                
+                // look up with chaining
+                {
+                    start = std::chrono::system_clock::now();
+                    auto found = map->get(key);
+                    end = std::chrono::system_clock::now();
+                    elapsed_seconds = end - start;
+                    
+                    cout << "(chaining) lookup time: " << elapsed_seconds.count() << "s\n";
+                    if (found) found->show();
+                    else cout << "Record not found!" << endl;
+                    
+                    chainingStats.showlookupCollisions();
+                    chainingStats.resetCounters();
+                }
+                
+                // look up with linear probing
+                {
+                    start = std::chrono::system_clock::now();
+                    auto found = map2->get(key);
+                    end = std::chrono::system_clock::now();
+                    elapsed_seconds = end - start;
+                    
+                    cout << "(linear probe) lookup time: " << elapsed_seconds.count() << "s\n";
+                    if (found) found->show();
+                    else cout << "Record not found!" << endl;
+                    
+                    linearProbeStats.showlookupCollisions();
+                    linearProbeStats.resetCounters();
                 }
                 
                 break;

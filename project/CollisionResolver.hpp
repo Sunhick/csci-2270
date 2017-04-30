@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "CollisionCounter.hpp"
+
 using namespace std;
 
 // forward declaration to avoid cyclic reference
@@ -30,7 +32,12 @@ public:
 
 // open addressing (using linear probing)
 class LinearProbingResolver : public CollisionResolver {
+private:
+    CollisionCounter* counter;
+    
 public:
+    LinearProbingResolver(CollisionCounter* counter = nullptr);
+    
     virtual void add(HashTable* map, HashEntry* entry, int index) override;
     virtual PlayerInfo* get(HashTable* map, string key, int index) override;
     virtual void Delete(HashEntry* entry) override;
@@ -40,7 +47,12 @@ public:
 
 // collsion resolution using chaining
 class ChainingResolver : public CollisionResolver {
+private:
+    CollisionCounter* counter;
+    
 public:
+    ChainingResolver(CollisionCounter* counter = nullptr);
+    
     virtual void add(HashTable* map, HashEntry* entry, int index) override;
     virtual PlayerInfo* get(HashTable* map, string key, int index) override;
     virtual void Delete(HashEntry* entry) override;
