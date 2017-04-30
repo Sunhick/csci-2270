@@ -31,7 +31,12 @@ void LinearProbingResolver::add(HashTable* map, HashEntry* entry, int index) {
             map->table[index]->player.addMoreInfo(entry->player);
             return;
         }
-        
+//        
+//        if (map->table[index]->player.key() == entry->player.key()) {
+//            map->table[index]->player.show();
+//            entry->player.show();
+//        }
+//        
         index = (index+1) % capacity;
         
         // track the add collisions
