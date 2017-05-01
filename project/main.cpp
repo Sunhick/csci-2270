@@ -124,9 +124,9 @@ int main(int argc, const char * argv[]) {
             {
                 string firstName, lastName;
                 
-                cout << "Enter first name: " << endl;
+                cout << "Enter first name: ";
                 std::getline(cin, firstName);
-                cout << "Enter last name: " << endl;
+                cout << "Enter last name: ";
                 std::getline(cin, lastName);
                 
                 auto key = PlayerInfo::MakeKey(firstName, lastName);
@@ -135,10 +135,10 @@ int main(int argc, const char * argv[]) {
                 {
                     auto found = map->get(key);
 
+                    cout << endl << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
                     if (found) found->show();
                     else cout << "Record not found!" << endl;
-                    
-                    cout << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
+                
                     chainingStats.resetCounters();
                 }
                 
@@ -146,10 +146,10 @@ int main(int argc, const char * argv[]) {
                 {
                     auto found = map2->get(key);
                     
+                    cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
                     if (found) found->show();
                     else cout << "Record not found!" << endl;
                     
-                    cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
                     linearProbeStats.resetCounters();
                 }
                 
