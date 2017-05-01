@@ -76,27 +76,13 @@ int main(int argc, const char * argv[]) {
     HashTable* map = new HashTable(hashSize, new ChainingResolver(&chainingStats));
     HashTable* map2 = new HashTable(hashSize, new LinearProbingResolver(&linearProbeStats));
     
-    // time adding to hash table with chaining
-    start = std::chrono::system_clock::now();
     PopulateHashTable(filename, map);
-    end = std::chrono::system_clock::now();
-    
-    chainingStats.showAddCollisions();
-    
-    // time adding to hash table with chaining
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::cout << "(chaining) Populate table elapsed time: " << elapsed_seconds.count() << "s\n";
-    
-    // time adding to hash table with linear probing
-    start = std::chrono::system_clock::now();
     PopulateHashTable(filename, map2);
-    end = std::chrono::system_clock::now();
     
-    linearProbeStats.showAddCollisions();
+    cout << "Hash table size: " << hashSize << endl;
+    cout << "Collisions using open addressing: " << linearProbeStats.addCollisions << endl;
+    cout << "Collisions using chaining: " << chainingStats.addCollisions << endl;
     
-    elapsed_seconds = end - start;
-    std::cout << "(linear probe) Populate table elapsed time: " << elapsed_seconds.count() << "s\n";
-
     linearProbeStats.resetCounters();
     chainingStats.resetCounters();
     
@@ -111,7 +97,7 @@ int main(int argc, const char * argv[]) {
         switch (choice) {
             case 1:
             {
-                string firstName, lastName;
+                string firstName, lastName, playerId;
                 
                 cout << "Enter first name: " << endl;
                 std::getline(cin, firstName);
@@ -122,31 +108,23 @@ int main(int argc, const char * argv[]) {
                 
                 // look up with chaining
                 {
-                    start = std::chrono::system_clock::now();
                     auto found = map->get(key);
-                    end = std::chrono::system_clock::now();
-                    elapsed_seconds = end - start;
-                    
-                    cout << "(chaining) lookup time: " << elapsed_seconds.count() << "s\n";
+
                     if (found) found->show();
                     else cout << "Record not found!" << endl;
                     
-                    chainingStats.showlookupCollisions();
+                    cout << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
                     chainingStats.resetCounters();
                 }
                 
                 // look up with linear probing
                 {
-                    start = std::chrono::system_clock::now();
                     auto found = map2->get(key);
-                    end = std::chrono::system_clock::now();
-                    elapsed_seconds = end - start;
                     
-                    cout << "(linear probe) lookup time: " << elapsed_seconds.count() << "s\n";
                     if (found) found->show();
                     else cout << "Record not found!" << endl;
                     
-                    linearProbeStats.showlookupCollisions();
+                    cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
                     linearProbeStats.resetCounters();
                 }
                 
