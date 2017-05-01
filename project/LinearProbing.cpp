@@ -43,8 +43,7 @@ void LinearProbingResolver::add(HashTable* map, HashEntry* entry, int index) {
         if (counter) counter->addCollisions++;
     }
     
-    cout << "(linear probe): Unable to find a spot to add value!" << endl;
-    entry->player.show();
+    cout << "(linear probe): No free spot available for :" << entry->player.key() << endl;
 }
 
 PlayerInfo* LinearProbingResolver::get(HashTable* map, string key, int index){

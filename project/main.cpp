@@ -48,6 +48,31 @@ void PopulateHashTable(string filename, HashTable* map) {
     }
 }
 
+int getTableSize(string size) {
+    char multiplier = ' ';
+    float number;
+    
+    istringstream ss(size);
+    ss >> number >> multiplier;
+    
+    switch (multiplier) {
+        case 'k':
+        case 'K':
+            // Kilo
+            number *= 1000;
+            break;
+            
+        case ' ':
+            break;
+            
+        default:
+            cout << "Only K/k multiplier is supported!" << endl;
+            break;
+    }
+
+    return number;
+}
+
 int main(int argc, const char * argv[]) {
     
     string dmenu =  "1. Query hash table\n"
@@ -65,7 +90,7 @@ int main(int argc, const char * argv[]) {
     bool done = false;
     
     string filename {argv[1]};
-    int hashSize = stoi(argv[2]);
+    int hashSize = getTableSize(argv[2]);
     
     std::chrono::time_point<std::chrono::system_clock> start, end;
     
@@ -97,7 +122,7 @@ int main(int argc, const char * argv[]) {
         switch (choice) {
             case 1:
             {
-                string firstName, lastName, playerId;
+                string firstName, lastName;
                 
                 cout << "Enter first name: " << endl;
                 std::getline(cin, firstName);
