@@ -124,9 +124,9 @@ int main(int argc, const char * argv[]) {
             {
                 string firstName, lastName;
                 
-                cout << "Enter first name: ";
+                cout << "Enter first name: " << endl;
                 std::getline(cin, firstName);
-                cout << "Enter last name: ";
+                cout << "Enter last name: " << endl;
                 std::getline(cin, lastName);
                 
                 auto key = PlayerInfo::MakeKey(firstName, lastName);

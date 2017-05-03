@@ -40,7 +40,7 @@ private:
     int capacity;
     int size;
     
-    unsigned int hashfunc(const char* str, unsigned int seed = 0);
+    unsigned int hashfunc(const char* str, unsigned int seed = 1);
     inline int getIndex(string key);
     
     // Resolvers are friend classes 
