@@ -107,6 +107,8 @@ int main(int argc, const char * argv[]) {
     cout << "Hash table size: " << hashSize << endl;
     cout << "Collisions using open addressing: " << linearProbeStats.addCollisions << endl;
     cout << "Collisions using chaining: " << chainingStats.addCollisions << endl;
+    cout << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
+    cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
     
     linearProbeStats.resetCounters();
     chainingStats.resetCounters();

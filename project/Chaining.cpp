@@ -35,11 +35,21 @@ PlayerInfo* ChainingResolver::get(HashTable* map, string key, int index) {
 
 void ChainingResolver::add(HashTable* map, HashEntry* entry, int index) {
     auto collidedEntry = map->table[index];
+    
+    // match at the last entry ?
+    if (collidedEntry->player.areSame(entry->player)) {
+        collidedEntry->player.addMoreInfo(entry->player);
+        return;
+    }
+    
+    // track the add collisions
+    if (counter) counter->addCollisions++;
+    
     while (!collidedEntry->player.areSame(entry->player) && collidedEntry->next) {
         collidedEntry = collidedEntry->next;
         
-        // track the add collisions
-        if (counter) counter->addCollisions++;
+        // track the searchs
+        if (counter) counter->lookupCollisions++;
     }
     
     // match at the last entry ?

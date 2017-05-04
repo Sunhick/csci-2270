@@ -19,6 +19,15 @@ void LinearProbingResolver::add(HashTable* map, HashEntry* entry, int index) {
     auto capacity = map->capacity;
     auto key = entry->player.key();
     
+    // update the existing entry
+    if (map->table[index]->player.areSame(entry->player)) {
+        map->table[index]->player.addMoreInfo(entry->player);
+        return;
+    }
+    
+    // track the add collisions
+    if (counter) counter->addCollisions++;
+    
     while (begin++ < capacity) {
         // new entry
         if (!map->table[index]) {
@@ -39,8 +48,8 @@ void LinearProbingResolver::add(HashTable* map, HashEntry* entry, int index) {
 //        
         index = (index+1) % capacity;
         
-        // track the add collisions
-        if (counter) counter->addCollisions++;
+        // track the lookup
+        if (counter) counter->lookupCollisions++;
     }
     
     cout << "(linear probe): No free spot available for :" << entry->player.key() << endl;
