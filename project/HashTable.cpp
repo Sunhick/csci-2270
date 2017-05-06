@@ -8,6 +8,8 @@
 
 #include "HashTable.hpp"
 
+extern uint32_t SuperFastHash (const char * data, int len);
+
 HashTable::HashTable(int capacity, CollisionResolver* resolverStrategy)
     : capacity(capacity), size(0) {
     // construct zero initialized hash table of size
@@ -23,7 +25,10 @@ HashTable::~HashTable() {
 
 unsigned int HashTable::hashfunc(const char* str, unsigned int seed) {
     // Based on work of Paul Larson & George V Reilly from Microsoft.
-    // Simple and yet fast so that we get O(1) for hash function look ups
+    // Simple and yet fast so that we get O(1) for hash function look ups.
+    
+    // For more rigorous hash function. call superFastHash from hashing.cpp
+    // return SuperFastHash(str, static_cast<int>(strlen(str)));
     unsigned int hash = seed;
     while (*str) hash = hash * 101  +  *str++;
     return hash;
