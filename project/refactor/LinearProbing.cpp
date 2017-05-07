@@ -9,8 +9,8 @@
 #include "HashTable.hpp"
 #include "CollisionResolver.hpp"
 
-LinearProbingResolver::LinearProbingResolver(CollisionCounter* counter)
-    : counter(counter) {
+LinearProbingResolver::LinearProbingResolver(std::shared_ptr<CollisionCounter> counter)
+: counter(counter) {
 }
 
 void LinearProbingResolver::add(HashTable* map, HashEntry* entry, int index) {

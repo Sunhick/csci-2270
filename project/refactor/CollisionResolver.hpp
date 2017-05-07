@@ -33,10 +33,10 @@ public:
 // open addressing (using linear probing)
 class LinearProbingResolver : public CollisionResolver {
 private:
-    CollisionCounter* counter;
+    std::shared_ptr<CollisionCounter> counter;
     
 public:
-    LinearProbingResolver(CollisionCounter* counter = nullptr);
+    LinearProbingResolver(std::shared_ptr<CollisionCounter> counter = nullptr);
     
     virtual void add(HashTable* map, HashEntry* entry, int index) override;
     virtual std::unique_ptr<PlayerInfo> get(HashTable* map, string key, int index) override;
@@ -48,10 +48,10 @@ public:
 // collsion resolution using chaining
 class ChainingResolver : public CollisionResolver {
 private:
-    CollisionCounter* counter;
+    std::shared_ptr<CollisionCounter> counter;
     
 public:
-    ChainingResolver(CollisionCounter* counter = nullptr);
+    ChainingResolver(std::shared_ptr<CollisionCounter> counter = nullptr);
     
     virtual void add(HashTable* map, HashEntry* entry, int index) override;
     virtual std::unique_ptr<PlayerInfo> get(HashTable* map, string key, int index) override;

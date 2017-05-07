@@ -12,8 +12,8 @@
 #include "PlayerInfo.hpp"
 #include "CollisionResolver.hpp"
 
-ChainingResolver::ChainingResolver(CollisionCounter* counter)
-    : counter(counter) {
+ChainingResolver::ChainingResolver(std::shared_ptr<CollisionCounter> counter)
+: counter(counter) {
     
 }
 

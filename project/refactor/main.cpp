@@ -94,30 +94,30 @@ int main(int argc, const char * argv[]) {
     int hashSize = getTableSize(argv[2]);
     
     // create collision counter variables
-    CollisionCounter linearProbeStats("(linear probe)");
-    CollisionCounter chainingStats("(chaining)");
+    std::shared_ptr<CollisionCounter> linearProbeStats(new CollisionCounter("(linear probe)"));
+    std::shared_ptr<CollisionCounter> chainingStats(new CollisionCounter("(chaining)"));
     
     // Let c++11 smart pointers do memory management for me.
     auto map = std::shared_ptr<HashTable>(
                     new HashTable(hashSize,
-                                  std::unique_ptr<ChainingResolver>(new ChainingResolver(&chainingStats)))
+                                  std::unique_ptr<ChainingResolver>(new ChainingResolver(chainingStats)))
                 );
     auto map2 = std::shared_ptr<HashTable>(
                     new HashTable(hashSize,
-                                  std::unique_ptr<CollisionResolver>(new LinearProbingResolver(&linearProbeStats)))
+                                  std::unique_ptr<CollisionResolver>(new LinearProbingResolver(linearProbeStats)))
                 );
     
     PopulateHashTable(filename, map);
     PopulateHashTable(filename, map2);
     
     cout << "Hash table size: " << hashSize << endl;
-    cout << "Collisions using open addressing: " << linearProbeStats.addCollisions << endl;
-    cout << "Collisions using chaining: " << chainingStats.addCollisions << endl;
-    cout << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
-    cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
+    cout << "Collisions using open addressing: " << linearProbeStats->addCollisions << endl;
+    cout << "Collisions using chaining: " << chainingStats->addCollisions << endl;
+    cout << "Search operations using chaining: " << chainingStats->lookupCollisions << endl;
+    cout << "Search operations using open addressing: " << linearProbeStats->lookupCollisions << endl;
     
-    linearProbeStats.resetCounters();
-    chainingStats.resetCounters();
+    linearProbeStats->resetCounters();
+    chainingStats->resetCounters();
     
     do {
         cout << dmenu;
@@ -143,18 +143,18 @@ int main(int argc, const char * argv[]) {
                 {
                     auto found = map->get(key);
 
-                    cout << endl << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
+                    cout << endl << "Search operations using chaining: " << chainingStats->lookupCollisions << endl;
                     found->show();
-                    chainingStats.resetCounters();
+                    chainingStats->resetCounters();
                 }
                 
                 // look up with linear probing
                 {
                     auto found = map2->get(key);
                     
-                    cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
+                    cout << "Search operations using open addressing: " << linearProbeStats->lookupCollisions << endl;
                     found->show();
-                    linearProbeStats.resetCounters();
+                    linearProbeStats->resetCounters();
                 }
                 
                 break;
