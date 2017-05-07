@@ -13,6 +13,23 @@
 
 using namespace std;
 
+PlayerInfo::PlayerInfo(const PlayerInfo& rhs) {
+    teams = rhs.teams;
+    playerId = rhs.playerId;
+    firstName = rhs.firstName;
+    lastName = rhs.lastName;
+    birthYear = rhs.birthYear;
+    birthCountry = rhs.birthCountry;
+    weight = rhs.weight;
+    height = rhs.height;
+    bats = rhs.bats;
+    throws = rhs.throws;
+}
+
+PlayerInfo::~PlayerInfo() {
+    
+}
+
 PlayerInfo PlayerInfo::ConstructFrom(string line) {
     stringstream lineStream(line);
     

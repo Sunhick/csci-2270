@@ -75,10 +75,7 @@ int getTableSize(string size) {
 }
 
 int main(int argc, const char * argv[]) {
-    
-    PlayerInfo p = NullPlayerInfo();
-    p.show();
-    
+
     string dmenu =  "1. Query hash table\n"
                     "2. Quit program\n";
     
@@ -147,8 +144,7 @@ int main(int argc, const char * argv[]) {
                     auto found = map->get(key);
 
                     cout << endl << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
-                    found.show();
-                
+                    found->show();
                     chainingStats.resetCounters();
                 }
                 
@@ -157,8 +153,7 @@ int main(int argc, const char * argv[]) {
                     auto found = map2->get(key);
                     
                     cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
-                    found.show();
-                    
+                    found->show();
                     linearProbeStats.resetCounters();
                 }
                 

@@ -48,7 +48,7 @@ public:
     ~HashTable();
     
     void put(string key, PlayerInfo value);
-    PlayerInfo get(string key);
+    std::unique_ptr<PlayerInfo> get(string key);
     void clear();
     void rehash();
 };

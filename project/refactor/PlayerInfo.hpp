@@ -30,6 +30,10 @@ public:
     : teams(teams), playerId(playerId), firstName(firstName), lastName(lastName), birthYear(birthYear),
     birthCountry(birthCountry), weight(weight), height(height), bats(bats), throws(throws)
     { }
+    
+    PlayerInfo(const PlayerInfo& );
+    ~PlayerInfo();
+    
     char bats;
     char throws;
     
@@ -60,7 +64,7 @@ class NullPlayerInfo : public PlayerInfo {
 public:
     NullPlayerInfo() {}
     virtual void show() const override {
-        cout << "Record not found" << endl;
+        cout << "Record not found!" << endl;
     }
 };
 

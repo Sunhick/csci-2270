@@ -44,11 +44,11 @@ void HashTable::put(string key, PlayerInfo value) {
     size++;
 }
 
-PlayerInfo HashTable::get(string key) {
+std::unique_ptr<PlayerInfo> HashTable::get(string key) {
     auto index = getIndex(key);
     
     auto found = table[index];
-    if (!found) return NullPlayerInfo();
+    if (!found) return std::unique_ptr<PlayerInfo>(new NullPlayerInfo());
     
     return resolverStrategy->get(this, key, index);
 }
