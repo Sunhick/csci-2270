@@ -9,6 +9,7 @@
 #ifndef PlayerInfo_hpp
 #define PlayerInfo_hpp
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -23,7 +24,12 @@ struct TeamInfo {
 
 class PlayerInfo {
 public:
-    
+    PlayerInfo() {}
+    PlayerInfo(vector<TeamInfo> teams, string playerId, string firstName, string lastName,
+               string birthYear, string birthCountry, float weight, float height, char bats, char throws)
+    : teams(teams), playerId(playerId), firstName(firstName), lastName(lastName), birthYear(birthYear),
+    birthCountry(birthCountry), weight(weight), height(height), bats(bats), throws(throws)
+    { }
     char bats;
     char throws;
     
@@ -43,11 +49,19 @@ public:
     const string uid() const;
     void addMoreInfo(const PlayerInfo& samePerson);
     
-    void show() const;
-    
+    virtual void show() const;
+
     static PlayerInfo ConstructFrom(string line);
     static string MakeKey(string firstName, string lastName);
     static string MakeKey(PlayerInfo& player);
+};
+
+class NullPlayerInfo : public PlayerInfo {
+public:
+    NullPlayerInfo() {}
+    virtual void show() const override {
+        cout << "Record not found" << endl;
+    }
 };
 
 #endif /* PlayerInfo_hpp */

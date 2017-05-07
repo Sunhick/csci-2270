@@ -17,11 +17,11 @@ ChainingResolver::ChainingResolver(CollisionCounter* counter)
     
 }
 
-PlayerInfo* ChainingResolver::get(HashTable* map, string key, int index) {
+PlayerInfo ChainingResolver::get(HashTable* map, string key, int index) {
     auto entry = map->table[index];
     while (entry) {
         if (entry->player.key() == key) {
-            return &entry->player;
+            return entry->player;
         }
         
         entry = entry->next;
@@ -30,7 +30,7 @@ PlayerInfo* ChainingResolver::get(HashTable* map, string key, int index) {
         if (counter) counter->lookupCollisions++;
     }
     
-    return nullptr;
+    return NullPlayerInfo();
 }
 
 void ChainingResolver::add(HashTable* map, HashEntry* entry, int index) {

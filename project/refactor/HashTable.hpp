@@ -9,6 +9,7 @@
 #ifndef HashTable_hpp
 #define HashTable_hpp
 
+#include <memory>
 #include <iostream>
 
 #include "PlayerInfo.hpp"
@@ -24,11 +25,6 @@ public:
         : player(value), next(nullptr), previous(nullptr)
     { };
     
-    HashEntry(const HashEntry& other) {
-        // copy ctor: memberwise copy
-        std::memcpy(this, &other, sizeof(HashEntry));
-    }
-    
     HashEntry* next;
     HashEntry* previous;
 };
@@ -36,7 +32,7 @@ public:
 class HashTable {
 private:
     HashEntry **table;
-    CollisionResolver *resolverStrategy;
+    std::unique_ptr<CollisionResolver> resolverStrategy;
     int capacity;
     int size;
     
@@ -48,11 +44,11 @@ private:
     friend class ChainingResolver;
     
 public:
-    HashTable(int size = 1024, CollisionResolver* resolverStrategy = nullptr);
+    HashTable(int capacity = 1024, std::unique_ptr<CollisionResolver> resolverStrategy = nullptr);
     ~HashTable();
     
     void put(string key, PlayerInfo value);
-    PlayerInfo* get(string key);
+    PlayerInfo get(string key);
     void clear();
     void rehash();
 };

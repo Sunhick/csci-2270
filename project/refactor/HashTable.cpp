@@ -10,16 +10,15 @@
 
 extern uint32_t SuperFastHash (const char * data, int len);
 
-HashTable::HashTable(int capacity, CollisionResolver* resolverStrategy)
+HashTable::HashTable(int capacity, std::unique_ptr<CollisionResolver> resolverStrategy)
     : capacity(capacity), size(0) {
     // construct zero initialized hash table of size
     table = new HashEntry *[capacity];
-    this->resolverStrategy = resolverStrategy;
+    this->resolverStrategy = std::move(resolverStrategy);
 }
 
 HashTable::~HashTable() {
     clear();
-    delete resolverStrategy;
     delete table;
 }
 
@@ -45,11 +44,11 @@ void HashTable::put(string key, PlayerInfo value) {
     size++;
 }
 
-PlayerInfo* HashTable::get(string key) {
+PlayerInfo HashTable::get(string key) {
     auto index = getIndex(key);
     
     auto found = table[index];
-    if (!found) return nullptr;
+    if (!found) return NullPlayerInfo();
     
     return resolverStrategy->get(this, key, index);
 }

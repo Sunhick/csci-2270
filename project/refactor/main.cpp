@@ -8,6 +8,7 @@
 
 #include <string>
 #include <chrono>
+#include <memory>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -23,7 +24,7 @@ void die(string message) {
     exit(0);
 }
 
-void PopulateHashTable(string filename, HashTable* map) {
+void PopulateHashTable(string filename, std::shared_ptr<HashTable> map) {
     ifstream file(filename);
     
     // non-existant or corrupted file
@@ -75,6 +76,9 @@ int getTableSize(string size) {
 
 int main(int argc, const char * argv[]) {
     
+    PlayerInfo p = NullPlayerInfo();
+    p.show();
+    
     string dmenu =  "1. Query hash table\n"
                     "2. Quit program\n";
     
@@ -92,14 +96,19 @@ int main(int argc, const char * argv[]) {
     string filename {argv[1]};
     int hashSize = getTableSize(argv[2]);
     
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    
     // create collision counter variables
     CollisionCounter linearProbeStats("(linear probe)");
     CollisionCounter chainingStats("(chaining)");
     
-    HashTable* map = new HashTable(hashSize, new ChainingResolver(&chainingStats));
-    HashTable* map2 = new HashTable(hashSize, new LinearProbingResolver(&linearProbeStats));
+    // Let c++11 smart pointers do memory management for me.
+    auto map = std::shared_ptr<HashTable>(
+                    new HashTable(hashSize,
+                                  std::unique_ptr<ChainingResolver>(new ChainingResolver(&chainingStats)))
+                );
+    auto map2 = std::shared_ptr<HashTable>(
+                    new HashTable(hashSize,
+                                  std::unique_ptr<CollisionResolver>(new LinearProbingResolver(&linearProbeStats)))
+                );
     
     PopulateHashTable(filename, map);
     PopulateHashTable(filename, map2);
@@ -138,8 +147,7 @@ int main(int argc, const char * argv[]) {
                     auto found = map->get(key);
 
                     cout << endl << "Search operations using chaining: " << chainingStats.lookupCollisions << endl;
-                    if (found) found->show();
-                    else cout << "Record not found!" << endl;
+                    found.show();
                 
                     chainingStats.resetCounters();
                 }
@@ -149,8 +157,7 @@ int main(int argc, const char * argv[]) {
                     auto found = map2->get(key);
                     
                     cout << "Search operations using open addressing: " << linearProbeStats.lookupCollisions << endl;
-                    if (found) found->show();
-                    else cout << "Record not found!" << endl;
+                    found.show();
                     
                     linearProbeStats.resetCounters();
                 }
@@ -174,7 +181,5 @@ int main(int argc, const char * argv[]) {
     } while(!done);
     
     cout << "Goodbye!" << endl;
-    delete map;
-    delete map2;
     return 0;
 }

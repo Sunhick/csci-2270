@@ -67,16 +67,16 @@ PlayerInfo PlayerInfo::ConstructFrom(string line) {
     };
     
     return {
-        .teams = {teamInfo},
-        .playerId = playerId,
-        .firstName = firstName,
-        .lastName = lastName,
-        .birthYear = birthYear,
-        .birthCountry = birthCountry,
-        .weight = weight,
-        .height = height,
-        .bats = bats,
-        .throws = throws
+        {teamInfo},
+        playerId,
+        firstName,
+        lastName,
+        birthYear,
+        birthCountry,
+        weight,
+        height,
+        bats,
+        throws
     };
 }
 

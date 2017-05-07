@@ -24,7 +24,7 @@ class HashEntry;
 class CollisionResolver {
 public:
     virtual void add(HashTable* map, HashEntry* entry, int index) = 0;
-    virtual PlayerInfo* get(HashTable* map, string key, int index) = 0;
+    virtual PlayerInfo get(HashTable* map, string key, int index) = 0;
     virtual void Delete(HashEntry* entry) = 0;
     
     virtual ~CollisionResolver() { }
@@ -39,7 +39,7 @@ public:
     LinearProbingResolver(CollisionCounter* counter = nullptr);
     
     virtual void add(HashTable* map, HashEntry* entry, int index) override;
-    virtual PlayerInfo* get(HashTable* map, string key, int index) override;
+    virtual PlayerInfo get(HashTable* map, string key, int index) override;
     virtual void Delete(HashEntry* entry) override;
     
     virtual ~LinearProbingResolver();
@@ -54,7 +54,7 @@ public:
     ChainingResolver(CollisionCounter* counter = nullptr);
     
     virtual void add(HashTable* map, HashEntry* entry, int index) override;
-    virtual PlayerInfo* get(HashTable* map, string key, int index) override;
+    virtual PlayerInfo get(HashTable* map, string key, int index) override;
     virtual void Delete(HashEntry* entry) override;
     
     virtual ~ChainingResolver();
