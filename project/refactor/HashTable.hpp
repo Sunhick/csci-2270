@@ -22,11 +22,10 @@ public:
     PlayerInfo player;
     
     HashEntry(PlayerInfo value)
-        : player(value), next(nullptr), previous(nullptr)
+        : player(value), next(nullptr)
     { };
     
     HashEntry* next;
-    HashEntry* previous;
 };
 
 class HashTable {

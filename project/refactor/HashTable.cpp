@@ -18,6 +18,7 @@ HashTable::HashTable(int capacity, std::unique_ptr<CollisionResolver> resolverSt
 }
 
 HashTable::~HashTable() {
+    cout << "Deleted hash table" << endl;
     clear();
     delete table;
 }
