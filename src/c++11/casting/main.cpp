@@ -51,7 +51,7 @@ void logAndPrint(shared_ptr<base> p) {
 }
 
 // ref: https://arne-mertz.de/2015/01/a-casting-show/
-void nochange(Person const& person) {
+void nochange(const Person& person) {
     // person object shouldn't be changed.
     // person.name = "changed!"; // error
     
@@ -63,19 +63,19 @@ void nochange(Person const& person) {
 
 // reinterpret_cast works only with pointers on unrelated types
 void fake(Person* p) {
-    cout << "real person: " << p->name << " " << p->id << endl;
+    cout << "person: " << p->name << " " << p->id << endl;
     Doppelganger* d = reinterpret_cast<Doppelganger*>(p);
-    if(d) {
+    if(d && d->fake) {
         cout << boolalpha << "fake person: " << d->name << " " << d->id << d->fake << endl;
     }
 }
 
-void fake(Doppelganger* p) {
-    Doppelganger* d = reinterpret_cast<Doppelganger*>(p);
-    if(d) {
-        cout << boolalpha << "fake person: " << d->name << " " << d->id << d->fake << endl;
-    }
-}
+// void fake(Doppelganger* p) {
+//     Doppelganger* d = reinterpret_cast<Doppelganger*>(p);
+//     if(d) {
+//         cout << boolalpha << "fake person: " << d->name << " " << d->id << d->fake << endl;
+//     }
+// }
 
 // static_cast: aware of narrowing
 // caution: Also works if dynamic types are known and gaurenteed at runtime
@@ -110,7 +110,7 @@ int main(int argc, const char * argv[]) {
         fake(&p);
         
         Doppelganger f("Hello",98);
-        fake(&f);
+        fake(reinterpret_cast<Person*>(&f));
     }
     cout << "-----------------" << endl;
 
