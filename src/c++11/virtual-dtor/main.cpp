@@ -56,7 +56,7 @@ int main(int argc, char *argv[argc]) {
   
   // comment out virtual dtor in Foo to see the what happens
   // without virtual dtor, calling delete from base ptr will
-  // call derived type dtor.
+  // NOT call derived type dtor.
   Foo* f = new Bar;
   delete f;
   
